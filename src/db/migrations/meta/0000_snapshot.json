@@ -1,5 +1,5 @@
 {
-  "id": "62d3d516-c03b-4ae7-8bbe-12dd59e7831c",
+  "id": "1567ea36-899d-4858-a968-c5dde36cef97",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -209,17 +209,38 @@
           "primaryKey": false,
           "notNull": true
         },
+        "document_group_id": {
+          "name": "document_group_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "document_id": {
           "name": "document_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "completed": {
-          "name": "completed",
-          "type": "text",
+        "marking_scheme_id": {
+          "name": "marking_scheme_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "status",
+          "typeSchema": "docmarkai_schema",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NOT_STARTED'"
+        },
+        "completed": {
+          "name": "completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "completed_time": {
           "name": "completed_time",
@@ -232,6 +253,121 @@
           "type": "real",
           "primaryKey": false,
           "notNull": false
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_tests": {
+          "name": "total_tests",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "passed_tests": {
+          "name": "passed_tests",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "failed_tests": {
+          "name": "failed_tests",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "docmarkai_schema.marking_run_results": {
+      "name": "marking_run_results",
+      "schema": "docmarkai_schema",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "marking_run_id": {
+          "name": "marking_run_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_group_id": {
+          "name": "document_group_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_id": {
+          "name": "document_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "marking_scheme_id": {
+          "name": "marking_scheme_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "test_permutation_id": {
+          "name": "test_permutation_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "test_criteria_id": {
+          "name": "test_criteria_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "test_description": {
+          "name": "test_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "evaluation": {
+          "name": "evaluation",
+          "type": "evaluation",
+          "typeSchema": "docmarkai_schema",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -299,8 +435,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "description": {
-          "name": "description",
+        "test_description": {
+          "name": "test_description",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -324,7 +460,25 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "docmarkai_schema.status": {
+      "name": "status",
+      "schema": "docmarkai_schema",
+      "values": [
+        "NOT_STARTED",
+        "IN_PROGRESS",
+        "COMPLETED"
+      ]
+    },
+    "docmarkai_schema.evaluation": {
+      "name": "evaluation",
+      "schema": "docmarkai_schema",
+      "values": [
+        "PASS",
+        "FAIL"
+      ]
+    }
+  },
   "schemas": {
     "docmarkai_schema": "docmarkai_schema"
   },

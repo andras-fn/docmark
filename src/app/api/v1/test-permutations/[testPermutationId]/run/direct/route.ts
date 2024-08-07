@@ -4,13 +4,17 @@ import {
   markingRunPermutations,
   MarkingRunPermutations,
 } from "@/db/schemas/markingRunPermutations";
-import { getAssoToken } from "@/lib/getAssoToken";
-import { createPlatformServiceJob } from "@/lib/createPlatformServiceJob";
+import {
+  markingRunResults,
+  MarkingRunResults,
+  InsertMarkingRunResults,
+} from "@/db/schemas/markingRunResults";
 import { eq, and, count } from "drizzle-orm";
 import { document } from "@/db/schemas/document";
 
 import OpenAI from "openai";
 import { systemMessage } from "@/lib/systemMessage";
+import { comment } from "postcss";
 
 export async function POST(
   request: Request,
@@ -19,7 +23,7 @@ export async function POST(
   try {
     // get the test permutation id from the url
     const testPermutationId = params.testPermutationId;
-    console.log(testPermutationId);
+    //console.log(testPermutationId);
 
     // check if the test permutation id is a valid UUID
     if (!isValidUUID(testPermutationId)) {
@@ -116,40 +120,77 @@ export async function POST(
       ],
     });
 
-    console.log(result);
+    // console.log(result);
 
     const content = JSON.parse(result?.choices[0]?.message.content || "");
 
-    console.log(content);
+    //console.log(content);
 
     // what do we need to update?
     // - marking run permutations
+    // - marking run results
+    const markingResults: InsertMarkingRunResults[] = [];
 
-    markingRunReuslts;
+    // summary, keyDiagnosis, anyNewMedication, nextActions, urgency
+    const categories = Object.keys(content.results.categories);
+    categories.forEach((category) => {
+      content.results.categories[category].testCriteria.forEach(
+        (criteria: any) => {
+          markingResults.push({
+            markingRunId: testPermutation.markingRunId,
+            documentGroupId: testPermutation.documentGroupId,
+            documentId: testPermutation.documentId,
+            markingSchemeId: testPermutation.markingSchemeId,
+            testPermutationId: testPermutation.id,
+            category: category,
+            testCriteriaId: criteria.testCriteriaId,
+            testDescription: criteria.testDescription,
+            evaluation: criteria.evaluation,
+            comment: criteria.comment,
+          });
+        }
+      );
+    });
 
-    // // update database with the jobId
-    // await db
-    //   .update(markingRunPermutations)
-    //   .set({
-    //     status: "IN_PROGRESS",
-    //     jobId: jobResponse.data.jobId,
-    //   })
-    //   .where(eq(markingRunPermutations.id, testPermutationId));
+    //console.log(markingResults);
 
-    // console.log(
-    //   `Updated marking run permutation (${testPermutationId}) with jobId: ${jobResponse.data.jobId}`
-    // );
+    // update database with the jobId
+    const markingRunPermutationsUpdate = db
+      .update(markingRunPermutations)
+      .set({
+        status: "COMPLETED",
+        completed: true,
+        completedTime: new Date(),
+        totalTests: content.results.totalPossibleScore,
+        passedTests: content.results.overallScore,
+        failedTests:
+          content.results.totalPossibleScore - content.results.overallScore,
+      })
+      .where(eq(markingRunPermutations.id, testPermutationId));
+
+    const markingRunResultsUpdate = db
+      .insert(markingRunResults)
+      .values(markingResults)
+      .returning({ id: markingRunResults.id });
+
+    const [markingRunPermutationsUpdateResult, markingRunResultsUpdateResult] =
+      await Promise.all([
+        markingRunPermutationsUpdate,
+        markingRunResultsUpdate,
+      ]);
+
+    //console.log(markingRunPermutationsUpdateResult);
+    //console.log(markingRunResultsUpdateResult);
 
     return Response.json(
       {
         status: 200,
-        data: {
-          content,
-        },
+        data: markingRunResultsUpdateResult,
       },
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return Response.json({ status: 500, issues: error }, { status: 500 });
   }
 }

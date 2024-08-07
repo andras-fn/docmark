@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1722343290225,
-      "tag": "0000_high_thor",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1722418471235,
-      "tag": "0001_careful_boomerang",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1722418505166,
-      "tag": "0002_fresh_norman_osborn",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1722419122465,
-      "tag": "0003_parallel_green_goblin",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1722434814671,
-      "tag": "0004_rapid_monster_badoon",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1722434994794,
-      "tag": "0005_cultured_gateway",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1722509291056,
-      "tag": "0006_wandering_next_avengers",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1722947381250,
-      "tag": "0007_rapid_diamondback",
+      "when": 1723032205597,
+      "tag": "0000_light_zemo",
       "breakpoints": true
     }
   ]

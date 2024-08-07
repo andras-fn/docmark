@@ -37,7 +37,6 @@ export const markingRunPermutations = docmarkaiSchema.table(
     totalTests: real("total_tests"),
     passedTests: real("passed_tests"),
     failedTests: real("failed_tests"),
-    results: jsonb("results"),
   }
 );
 

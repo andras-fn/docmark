@@ -39,7 +39,7 @@ const Viewer = ({ markingRunId }) => {
       <div className="w-full">
         <div className="w-full flex flex-col divide-y divide-slate-500">
           <Banner data={data} />
-          <MarkingSchemeViewer markingSchemeData={data} />
+          <MarkingSchemeViewer markingRunId={markingRunId} />
         </div>
       </div>
     </div>

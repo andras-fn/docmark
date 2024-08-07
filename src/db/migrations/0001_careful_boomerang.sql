@@ -1,1 +1,0 @@
-ALTER TABLE "docmarkai_schema"."marking_run_permutations" DROP COLUMN IF EXISTS "completed";

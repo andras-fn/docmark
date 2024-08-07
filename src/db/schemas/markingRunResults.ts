@@ -1,20 +1,13 @@
-import {
-  text,
-  pgSchema,
-  uuid,
-  timestamp,
-  real,
-  boolean,
-  pgEnum,
-  jsonb,
-} from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { testCriteria } from "./testCriteria";
-import { comment } from "postcss";
-
+import { text, pgSchema, uuid, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { relations } from "drizzle-orm";
+import { markingScheme } from "./markingScheme";
 export const docmarkaiSchema = pgSchema("docmarkai_schema");
 
-export const evaluationEnum = docmarkaiSchema.enum("status", ["PASS", "FAIL"]);
+export const evaluationEnum = docmarkaiSchema.enum("evaluation", [
+  "PASS",
+  "FAIL",
+]);
 
 export const markingRunResults = docmarkaiSchema.table("marking_run_results", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -28,6 +21,26 @@ export const markingRunResults = docmarkaiSchema.table("marking_run_results", {
   category: text("category").notNull(),
   testCriteriaId: uuid("test_criteria_id").notNull(),
   testDescription: text("test_description").notNull(),
-  evaluation: evaluationEnum("status").notNull(),
+  evaluation: evaluationEnum("evaluation").notNull(),
   comment: text("comment").notNull(),
 });
+
+export const insertMarkingRunResultsSchema =
+  createInsertSchema(markingRunResults);
+
+export type MarkingRunResults = typeof markingRunResults.$inferSelect;
+export type InsertMarkingRunResults = typeof markingRunResults.$inferInsert;
+
+export const markingSchemeRelations = relations(markingScheme, ({ many }) => ({
+  markingSchemes: many(markingRunResults),
+}));
+
+export const markingRunResultsRelations = relations(
+  markingRunResults,
+  ({ one }) => ({
+    markingScheme: one(markingScheme, {
+      fields: [markingRunResults.markingSchemeId],
+      references: [markingScheme.id],
+    }),
+  })
+);
