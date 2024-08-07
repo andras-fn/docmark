@@ -1,0 +1,1 @@
+ALTER TABLE "docmarkai_schema"."marking_run_permutations" ADD COLUMN "completed" boolean DEFAULT false NOT NULL;

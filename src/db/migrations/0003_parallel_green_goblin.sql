@@ -1,0 +1,1 @@
+ALTER TABLE "docmarkai_schema"."marking_run_permutations" ADD COLUMN "marking_scheme_id" uuid NOT NULL;

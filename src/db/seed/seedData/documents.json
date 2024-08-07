@@ -1,0 +1,85 @@
+[
+    {
+        "documentName": "Patient 006",
+        "documentText": "Our Reference: ETS/248S27\nDate of Clinic/Admission:\nDate Dictated\n\nDate typed:\n\nDrJ Kent\n\nSmallville Surgery\n\n1 High Street,Smallville\nDerbyshire,\ne-Distribution FF99 1GB\n\nDear Dr J Kent,\n\nMetropolis Women’s and Children’s\nNHS Foundation Trust\n\nDepartment of Ear, Nose and Throat/\nHead & Neck Surgery\n\nMetropolis Children’s Hospital\nSteelhouse Lane\n\nMetropolis\n\nFF99 7DS\n\nTel: 01234 567890\n\nwww. metc.met.org.uk\n\n21/02/2018\n23/02/2018\n15/03/2018\n\nBackground: Recurrent tonsillitis\nPrevious sleep disordered breathing\n\nAdmission: 21/02/2018\n\nProcedure: Tonsillectomy\nExamination postnasal space, tiny adenoids, no adenoidectomy indicated\n\nDischarge: 21 February 2018\nTelephone\nFollow-up: Three months.\n\nYours Sincerely\n\nElectronically signed by Miss Martha Kent PhD, FDSRCS, FRCS(ORL-HNS), Consultant ENT Surgeon.\nGMC/Professional Number: X1111111\n\nAt 4: 56 PM on 29/03/2018\n\nLetter written by Martha Kent GMC/Professional Number: X1111111\n\nray\n\nBy your side\n\nCHAIRMAN Professor Sir Richard Grayson CHIEF EXECUTIVE OFFICER Cassandra Cain",
+        "aiResults": {
+            "Summary": "The patient was admitted on 21/02/2018 for a tonsillectomy due to recurrent tonsillitis and previous sleep disordered breathing. Examination of the postnasal space revealed tiny adenoids, and no adenoidectomy was indicated. The patient was discharged on the same day, with a follow-up scheduled in three months.",
+            "Urgency": "Non-Urgent",
+            "Next Actions": [
+                "Schedule a follow-up appointment in three months from the date of surgery (21/02/2018)."
+            ],
+            "Key Diagnosis": "Recurrent tonsillitis, Tonsillectomy",
+            "Any New Medication": ""
+        }
+    },
+    {
+        "documentName": "Patient 005",
+        "documentText": "DEPARTMENT OF CARDIOLOGY\n\nDrC LKent Metropolis General Hospital\nSmallville Medical Centre Hobbs Bay\nSmallville Medical Ctr, Metropolis\nMain Street, Orkney\nOrkney FE99 9EF\nFE99 3RF\n\nTel: 01234 567890\n\nSecretary: Jimmy Olsen:\nJimmy.olsen@metnhs.org.uk\n\nSpecialist Nurse- AF:\n\nSister Lena Luthor - lena.luthor@metnhs.org.uk\nSister Kara Danvers - kara.danvers@metnhs.org.uk\nResearch Staff:\n\nSister Dipa Narula - dipa.narula@metnhs.org.uk\n\nRef RW/TRS\n\nDear Dr Kent,\n\nPatient Name: Bruce Banner\n\nPatient Address: 12 Steins Way, Hobbs Bay, Metropolis, FE99 2WJ\nPatient Unit Number: 111 111 1111\n\nPrincipal Diagnosis: Permanent AF.\n\nSecondary Diagnoses: Ischaemia heart disease with previous MI and subsequent CABG.\nObesity (recent weight gain).\n\nFurther to my letter from 1* January 2019, Bruce had out-patient tests. There was evidence of\nmoderate left ventricular systolic dysfunction, right ventricular systolic dysfunction as well as\n\nmoderate mitral regurgitating on echocardiography.\n\nAmbulatory ECG monitoring showed sub-optimal heart rate control (average heart rate 102\nbpm). He will be seen in clinic.\n\nYours sincerely\n\nDR CLARK L KENT\nCONSULTANT CARDIOLOGIST\n\nBFSERTGHPTO\nA Teaching Trust of the University of The Trust is committed to ensuring that your personal information is Chief Executive: Lionel Luthor",
+        "aiResults": {
+            "Summary": "Bruce Banner has been diagnosed with permanent AF and secondary diagnoses include ischaemia heart disease with previous MI and subsequent CABG, and obesity with recent weight gain. Out-patient tests revealed moderate left ventricular systolic dysfunction, right ventricular systolic dysfunction, and moderate mitral regurgitation. Ambulatory ECG monitoring showed sub-optimal heart rate control with an average heart rate of 102 bpm, and he will be seen in clinic.",
+            "Urgency": "Non-Urgent",
+            "Next Actions": [
+                "Schedule clinic visit for Bruce Banner to address sub-optimal heart rate control."
+            ],
+            "Key Diagnosis": "Permanent AF, Ischaemia heart disease with previous MI and subsequent CABG, Obesity, Moderate left ventricular systolic dysfunction, Right ventricular systolic dysfunction, Moderate mitral regurgitation",
+            "Any New Medication": ""
+        }
+    },
+    {
+        "documentName": "Patient 004",
+        "documentText": "Department of Cardiology\n\nSecretary: Lana Lang\n\nDirect Tel: 01905 733843\n\nEmail: test-email@testnhs.org.uk\nOur Ref: AA/BBB\n\nNHS No: 1111111111\n\nDate: 12/01/2002\n\nDr B G Bibowski\n\nThe Interway Practice\nPrice House\n\n12 Riddermark Lane\nMetropolis\n\nDurham\n\nXX14 3XX\n\nDiagnostic Coronary Angiogram Report\n\nMetropolis Royal Hospital\nFirst Avenue Way\n\nGrogan Road\n\nMetropolis\n\nXX12 5XX\n\nTel No: 01234 567890\n\nStudy Date: 31/03/1999\n\nName Daisy Duke\n\nDOB: 07/02/1956\n\nOriginating Dept: CARDIAC CATHERISATION SUITE\nSupervising Consultant: Dr Emil Hamilton\n\nGP: Dr B G Bibowski\nReferring Dr: Dr Emil Hamilton\n\nOperator 1: Dr Emil Hamilton\nOperator 2: Dr\nINDICATION\n\nWorked up for Aortic valve intervention: Severe bicuspid Aortic stenosis:\n\nfollowing severe AS. ( Peak 41, Mean 23mmHg with normal LV).\nPAF-on Apixaban, OA, Hypertension\n\nfemale for OP angiogram\n\nFamily History: No Smoking: Never Smoked Previous MI: No\nDiabetes: Not Diabetic Cholesterol: Diet Previous PCI: No\nHypertension: History of Hypertentsion BMI: 27.22 (weight 65.4, height 151) Renal Disease: Normal",
+        "aiResults": {
+            "Summary": "Daisy Duke underwent a Diagnostic Coronary Angiogram which revealed Symptomatic Aortic Stenosis and unobstructive mild to moderate coronary arteries disease. The angiogram was successful with findings of mild disease in mid LAD and diagonal, mild disease in OM, and moderate disease in proximal PDA. A treatment plan is in place for a combined surgical MDT for aortic intervention.",
+            "Urgency": "Non-Urgent",
+            "Next Actions": [
+                "Schedule for next combined surgical MDT for aortic intervention."
+            ],
+            "Key Diagnosis": "Symptomatic Aortic Stenosis, Diagnostic Coronary Angiogram",
+            "Any New Medication": ""
+        }
+    },
+    {
+        "documentName": "Patient 003",
+        "documentText": "Clinical Investigations Springfield Hospital & Treatment Centre\n\nECHOCARDIOGRAPHY REPORT Springfield Acute Hospitals NHS Trust\nSimpsons Road\n\nSpringfield GH11 1GG\n\n01234 567890\nName Clark Kent Study Date 11/11/2011 11: 11 Ht 165 cm\nDOB 01/01/1924 Referred by GP Wt 90 kg\nGender Male Patient BSA 2.1 m2\nLocation CARDIOPULMONARY UNIT, LEVEL 1 BMI 30 kg/m?\nMRN 555332 Performed by Forest Gump\nNHS No 222 222 2222\nINDICATION Ankle swelling, SOBOE. Systolic murmur l ECG Sinus rhythm. 95 bpm.\nLV RV/ATRIA/OTHER 2D + M-MODE OTHER PARAMETERS\nIvSd 0.84 cm (0.5-1.1) | TAPSE 2.10 cm (21.7) Lat Peak E' Vel 6.9 cm/s\nLVIDd 5.80 cm (3.5-5.1) | LA dimension 3.80 cm (2.7-3.8) Lat E/E\" 13.4\nLVIDd index 2.9 cm/m? (2.1-3.1) | LA dimension index 1.90 cm/m? (1.5-2.3) Med Peak E' Vel 6.50 cm/s\nLVIDs 4.10 cm (2.0-3.7) | LAC(MOD-sp4) 53.30 ml Med E/E' 14.30\nLVvPWd 0.77.cm (0.6-1.2) | Ao root diam 3.10 cm E/Avg E' 13.80\nLV RWT 0.28 Prox asc Ao 3.10 cm\nLV mass 177.68 (51-173) | Prox Asc Ao index h 1.80 cm/m (1.14 - 1.98)\nLV mass index 87.80 g/m? (33 - 99)\nLV FS 29.90 % (25 - 43)\nLVEF (Teich) 56.30% (255)\nMAPSE 1.30 cm (21.2)\nMV AV/IVOT PV/TV\nMVE max vel 0.93 m/s LVOT V1 Max 1.12 m/s PA V2 max 1.08 m/s\nMV A max vel 1.56 m/s Ao V2 Max 1.55 m/s PA max PG 4.70 mmHg\nMV E/A ratio 0.60 Ao Max PG 9.60 mmHg TR max vel 2.71 m/s\nTR Max PG 29.40 mmHG",
+        "aiResults": {
+            "Summary": "Clark Kent underwent an echocardiography at Springfield Hospital, revealing a dilated left ventricle, basal septal thickening without LVOTO, normal systolic function with an EF approximately 60%, and diastolic impairment with visually mildly dilated LA. The study was technically difficult, limiting accurate measurements.",
+            "Urgency": "Non-Urgent",
+            "Next Actions": [
+                "Review echocardiography report for Clark Kent",
+                "Consider management plan for diastolic impairment and dilated left ventricle",
+                "Schedule follow-up appointment to discuss findings and treatment options"
+            ],
+            "Key Diagnosis": "Dilated left ventricle, Diastolic impairment",
+            "Any New Medication": ""
+        }
+    },
+    {
+        "documentName": "Patient 002",
+        "documentText": "Metropolis Hospitals NHS Trust: Imaging\nDepartment Report\n\nMetropolis Hospital\n\nPatient Name: Lois Lane\nPatient DoB: 19/02/1940\nPatient NHS Number: 111 111 1111\n\nVerified By: Alexander Luthor (Radiographer Metropolis Hospital) on 17/12/2017\nFirst Typed By: Alexander Luthor (Radiographer Metropolis Hospital) on 17/12/2017\n\nReport Text: Clinical History :\n\nCOVID-19 Positive: NO\n\nCOVID - 19 Suspected: NO\n\nWaiting PCR results: NO\n\n# -open - January 19. Has had op and skin grafts. New injury a\n\nfew weeks ago. Is painful, feels like the metal work is\n\nmoving\n\ncheck for new # and placement of metal work.\n\nExamination: Right ankle\n\nComparison: None\n\nFindings:\n\nNo previous imagine is available for comparison.\n\nExtensive orthopaedic repair is seen to the distal shift of\n\nthe tibia consisting of fixation plate and screws.\n\nNo definitive evidence of component loosening or failure.\n\nNo acute bony injury is demonstrated.\n\nMultiple vascular clips are noted in situ.\n\nThere is enthesopathy at the insertion sites of Achilles\n\ntendon and plantar fascia.",
+        "aiResults": {
+            "Summary": "Lois Lane underwent an examination for her right ankle due to pain and concerns about the movement of metal work from a previous operation and skin grafts. The imaging showed extensive orthopaedic repair with a fixation plate and screws, no evidence of component loosening or failure, and enthesopathy at the Achilles tendon and plantar fascia insertion sites.",
+            "Urgency": "Non-Urgent",
+            "Next Actions": [
+                "Review imaging report and assess if further intervention is required for enthesopathy.",
+                "Consider pain management options for the patient."
+            ],
+            "Key Diagnosis": "Enthesopathy at Achilles tendon and plantar fascia insertion sites",
+            "Any New Medication": ""
+        }
+    },
+    {
+        "documentName": "Patient 001",
+        "documentText": "The Hospital Building\nNHS Foundation Trust\n\nObstetrics & Gynaecology\n\nDr P H White Metropolis General Hospital\nSimpsons Surgery, Starlight Road\n1 Hobbs Bay,Central City, Metropolis\nDaleside, Derbyshire\nEast Anglia, XX45 7XX\nXX26 6XX\n\nTel 01234 567890\n\nDate Typed: 14\" July 2014\nRef: AA/CCC\n\nChristina, Secretary to Mr B Allen\nConsultant Obstetrician &Gynaecologist\nTelephone: 01234 567890 (direct line)\nObstetrics@Metropolishospital.org\n\nClinic: Allen/Rayner(Reg)-Am-Ch\nClinic Date: 14/07/2014\n\nDear Dr White\n\n| have seen Lois Lane in the gynaecology clinic today. She came today for a change of pessary.\nCurrently she is using a 65 mm ring pessary. Today she was worried that she had some bleeding\nand was concerned about an infection. She was very conscious about the pain during the\nprocedure as well. During the examination the vulva and vagina were very atrophic. | applied\nclear gel and removed the pessary. The pessary was clean with no discharge or any bleeding.\nThere was a small area of about 2-3 mms at the vaginal forchette area which was bleeding\nprobably because it was opened up by the pessary removal. | have apologised for this\nhappening during the examination despite using a lot of gel. | have taken a HVS and have it to\nthe lab but on speculum examination | couldn’t see any areas of ulcers, bleeding or discharge\npresent inside even though the vaginal mucosa was very dry and atrophic. | have re fitted her\nwith a 65 mm size pessary without any difficulty. She has been advised to use vaginal oestrogen\ncream twice a week by you but she has stopped using this for a while. | have advised her to\ncontinue using this again and my plan is that we will chase the HVS results. We will contact her\nif she needs any treatment. We will change the pessary and re examine her in 4 months’ time. |\nhave reassured her that this bleeding wasn’t coming internally from the vagina or around the\ncervix or area of the pessary which was pressing inside the vagina.",
+        "aiResults": {
+            "Summary": "Lois Lane attended the gynaecology clinic for a change of pessary due to concerns about bleeding and possible infection. A 65 mm ring pessary was successfully replaced after removing the previous one, which caused minor bleeding at the vaginal forchette area. She was advised to resume using vaginal oestrogen cream twice a week and will be contacted with HVS results; a follow-up for pessary change and examination is planned in 4 months.",
+            "Urgency": "Non-Urgent",
+            "Next Actions": [
+                "Advise Lois Lane to continue using vaginal oestrogen cream as prescribed.",
+                "Await and review HVS results, contact patient if treatment is needed.",
+                "Schedule a follow-up appointment in 4 months for pessary change and examination."
+            ],
+            "Key Diagnosis": "Minor bleeding due to pessary removal",
+            "Any New Medication": "Vaginal oestrogen cream"
+        }
+    }
+]
