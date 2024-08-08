@@ -20,6 +20,11 @@ export async function GET(request: Request, { params }: { params: any }) {
               name: true,
             },
           },
+          documentGroup: {
+            columns: {
+              name: true,
+            },
+          },
         },
       }),
       db
@@ -28,16 +33,6 @@ export async function GET(request: Request, { params }: { params: any }) {
         .where(eq(markingRunResults.markingRunId, markingRunId)),
       db.select().from(markingRun).where(eq(markingRun.id, markingRunId)),
     ]);
-
-    const groupedData = Object.groupBy(
-      results.map((result) => {
-        const newObj = { ...result };
-        newObj.markingSchemeName = result.markingScheme.name;
-        delete newObj.markingScheme;
-        return newObj;
-      }),
-      ({ markingSchemeId }) => markingSchemeId
-    );
 
     const groupByMarkingScheme = (data) => {
       return data.reduce((acc, current) => {
@@ -71,6 +66,8 @@ export async function GET(request: Request, { params }: { params: any }) {
         const newObj = { ...result };
         newObj.markingSchemeName = result.markingScheme.name;
         delete newObj.markingScheme;
+        newObj.documentGroupName = result.documentGroup.name;
+        delete newObj.documentGroup;
         return newObj;
       })
     );

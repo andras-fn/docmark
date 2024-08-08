@@ -14,15 +14,21 @@ const Viewers = () => {
 
   return (
     <div className="flex w-full divide-x divide-slate-500 min-h-[calc(100%-56px)] max-h-[calc(100%-56px)]">
-      <DocumentGroupsListViewer
-        selectedDocumentGroup={selectedDocumentGroup}
-        setSelectedDocumentGroup={setSelectedDocumentGroup}
-      />
-      <DocumentsListViewer
-        selectedDocumentGroup={selectedDocumentGroup}
-        selectedDocument={selectedDocument}
-        setSelectedDocument={setSelectedDocument}
-      />
+      <div className="w-96">
+        <DocumentGroupsListViewer
+          selectedDocumentGroup={selectedDocumentGroup}
+          setSelectedDocumentGroup={setSelectedDocumentGroup}
+        />
+      </div>
+
+      <div className="w-96">
+        <DocumentsListViewer
+          selectedDocumentGroup={selectedDocumentGroup}
+          selectedDocument={selectedDocument}
+          setSelectedDocument={setSelectedDocument}
+        />
+      </div>
+
       <DocumentViewer selectedDocument={selectedDocument} />
     </div>
   );

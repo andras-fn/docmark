@@ -1,27 +1,37 @@
 import { useEffect, useState } from "react";
 import TestResultCard from "./TestResultCard";
+import DocumentGroupsListViewer from "./DocumentGroupsListViewer";
+import MarkingSchemeListViewer from "./MarkingSchemeListViewer";
+import ResultsViewer from "./ResultsViewer";
 
-const MarkingSchemeViewer = ({ markingRunId }) => {
+const MarkingSchemeViewer = ({ markingRunData, markingRunId }) => {
+  console.log(markingRunData);
   const [markingRunResults, setMarkingRunResults] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [documentGroupsLoading, setDocumentGroupsLoading] = useState(true);
+  const [markingRunResultsLoading, setMarkingRunResultsLoading] =
+    useState(true);
 
   const [error, setError] = useState();
   const [errorMessage, setErrorMessage] = useState();
 
+  const [selectedDocumentGroup, setSelectedDocumentGroup] = useState();
+  const [selectedMarkingScheme, setSelectedMarkingScheme] = useState();
+
+  const [documentGroups, setDocumentGroups] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
+        setMarkingRunResultsLoading(true);
         const response = await fetch(
           `/api/v1/marking-runs/${markingRunId}/results`
         );
         const data = await response.json();
-        console.log("data");
         console.log(data.data);
 
         // Process the response data here
         setMarkingRunResults(data.data);
-        setIsLoading(false);
+        setMarkingRunResultsLoading(false);
       } catch (error) {
         // Handle error here
         setError(error);
@@ -31,46 +41,71 @@ const MarkingSchemeViewer = ({ markingRunId }) => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setDocumentGroupsLoading(true);
+        const documentGroupPromises = markingRunData.documentGroups.map(
+          (group) => {
+            return fetch(`/api/v1/document-groups/${group}`);
+          }
+        );
+
+        const documentGroupResponses = await Promise.all(documentGroupPromises);
+
+        const documentGroupData = await Promise.all(
+          documentGroupResponses.map((response) => response.json())
+        );
+
+        const documentGroupDataMapped = documentGroupData.map((group) => {
+          return group.data;
+        });
+        // Process the response data here
+        setDocumentGroups(documentGroupDataMapped);
+        setDocumentGroupsLoading(false);
+      } catch (error) {
+        // Handle error here
+        setError(error);
+        setErrorMessage(error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="w-full">
-      {isLoading ? (
+    <div className="w-full h-full">
+      {markingRunResultsLoading ? (
         <div className="p-2">Loading...</div>
       ) : (
-        <div className="w-full">
-          <div className="flex flex-col">
-            {markingRunResults &&
-              markingRunResults.map((markingScheme) => (
-                <div className="">
-                  <div className="flex justify-between items-center text-black p-2 font-semibold text-xl h-[56px]">
-                    <p>Marking Scheme - {markingScheme.markingSchemeName}</p>
-                    <div className="flex gap-x-4">
-                      <p>Total:</p>
-                      <p>Passed:</p>
-                      <p>Failed:</p>
-                    </div>
-                  </div>
-                  <div className="">
-                    marking scheme - category - doccument group - document -
-                    test
-                  </div>
-                  <div className="flex flex-col divide-y divide-slate-500 p-2">
-                    {markingRunResults && (
-                      <div className="flex flex-col divide-y divide-slate-500">
-                        <div className=" border border-slate-500 rounded">
-                          <div className="flex justify-between items-center text-black font-semibold text-l p-2 border-b border-slate-500">
-                            <p>Category - Summary</p>
-                          </div>
-                          <div className="flex flex-col divide-y divide-slate-500">
-                            {markingScheme.categories.summary.map((test) => (
-                              <TestResultCard test={test} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+        <div className="flex h-full w-full">
+          <div className="grid grid-rows-2 w-64 min-h-[calc(100%)] max-h-[calc(100%)] border-r border-slate-500 divide-y divide-slate-500">
+            <div className="">
+              <DocumentGroupsListViewer
+                isLoading={documentGroupsLoading}
+                documentGroups={documentGroups}
+                selectedDocumentGroup={selectedDocumentGroup}
+                setSelectedDocumentGroup={setSelectedDocumentGroup}
+              />
+            </div>
+
+            <div className="">
+              <MarkingSchemeListViewer
+                markingSchemes={markingRunResults}
+                selectedMarkingScheme={selectedMarkingScheme}
+                setSelectedMarkingScheme={setSelectedMarkingScheme}
+              />
+            </div>
+          </div>
+          <div className="w-full">
+            {selectedDocumentGroup && selectedMarkingScheme ? (
+              <ResultsViewer />
+            ) : (
+              <div className="p-2">
+                Please selected a Document Group and Marking Scheme
+              </div>
+            )}
           </div>
         </div>
       )}

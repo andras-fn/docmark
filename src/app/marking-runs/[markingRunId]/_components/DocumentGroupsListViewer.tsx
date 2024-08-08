@@ -4,57 +4,27 @@ import CompactPagination from "@/components/CompactPagination";
 import type { DocumentGroup } from "@/db/schemas/documentGroup";
 
 const DocumentGroupsListViewer = ({
+  isLoading,
+  documentGroups,
   selectedDocumentGroup,
   setSelectedDocumentGroup,
 }: {
+  isLoading: boolean;
+  documentGroups: DocumentGroup[];
   selectedDocumentGroup: DocumentGroup;
   setSelectedDocumentGroup: React.Dispatch<React.SetStateAction<DocumentGroup>>;
 }) => {
-  const [documentGroups, setDocumentGroups] = useState<DocumentGroup[]>([]);
-  const [numberOfPages, setNumberOfPages] = useState<number>(1);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [totalResultCount, setTotalResultCount] = useState<number>(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true); // Set loading state to true
-        const response = await fetch(
-          `/api/v1/document-groups?limit=40&offset=${
-            currentPage > 1 ? currentPage * 40 : 0
-          }`
-        );
-        const data = await response.json();
-        console.log(data);
-        setDocumentGroups(data.data);
-        setTotalResultCount(data.pagination.totalResultCount);
-        console.log(data.pagination.totalResultCount);
-        console.log(data.pagination.totalResultCount / 40);
-        const pageCheck = parseInt(data.pagination.totalResultCount) / 40;
-        if (pageCheck % 1 !== 0) {
-          setNumberOfPages(parseInt(data.pagination.totalResultCount) / 40 + 1);
-        } else {
-          setNumberOfPages(parseInt(data.pagination.totalResultCount) / 40);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false); // Set loading state to false
-      }
-    };
-
-    fetchData();
-  }, [currentPage]);
-
   const documentGroupClickHandler = (documentGroup: DocumentGroup) => {
+    console.log(documentGroup);
     setSelectedDocumentGroup(documentGroup);
   };
 
   return (
     <div className="w-full min-h-full h-full max-h-full">
       <div className="flex justify-between w-full p-2 font-medium border-b border-slate-500">
-        <h4 className="">Document Groups</h4> <p>{totalResultCount}</p>
+        <h4 className="">Document Groups</h4> <p>{documentGroups.length}</p>
       </div>
       <ScrollArea className="max-h-[calc(100%-41px-44px)] min-h-[calc(100%-41px-44px)] h-[calc(100%-41px-44px)]">
         {isLoading ? ( // Render loading state if isLoading is true
@@ -77,11 +47,6 @@ const DocumentGroupsListViewer = ({
           ))
         )}
       </ScrollArea>
-      <CompactPagination
-        numberOfPages={numberOfPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
     </div>
   );
 };

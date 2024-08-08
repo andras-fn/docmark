@@ -36,10 +36,19 @@ const Viewer = ({ markingRunId }) => {
       <div className="flex justify-between items-center text-black p-2 font-semibold text-xl h-[56px]">
         <p>Viewing Marking Run - {data && data.name}</p>
       </div>
-      <div className="w-full">
-        <div className="w-full flex flex-col divide-y divide-slate-500">
-          <Banner data={data} />
-          <MarkingSchemeViewer markingRunId={markingRunId} />
+      <div className="w-full h-full">
+        <div className="w-full flex flex-col divide-y divide-slate-500 h-full">
+          {isLoading ? (
+            <div className="p-2">Loading...</div>
+          ) : (
+            <>
+              <Banner data={data} />
+              <MarkingSchemeViewer
+                markingRunData={data}
+                markingRunId={markingRunId}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

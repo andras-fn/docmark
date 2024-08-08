@@ -1,11 +1,11 @@
 const TestResultCard = ({ test }) => {
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center text-black p-2 font-medium">
+    <div className="flex flex-col p-2">
+      <div className="flex items-center text-black font-medium">
         <p>{test.testDescription}</p>
       </div>
 
-      <div className="flex items-center text-black p-2 gap-x-2">
+      <div className="flex items-center text-black gap-x-2">
         <p
           className={`font-semibold ${
             test.evaluation === "PASS" ? "text-green-600" : "text-red-600"

@@ -32,7 +32,7 @@ const CompactPagination: React.FC<CompactPaginationProps> = ({
   };
 
   return (
-    <div className="flex items-center gap-x-1 justify-center text-sm p-1 border-t border-slate-500">
+    <div className="w-full flex items-center gap-x-1 justify-center text-sm p-1 border-t border-slate-500">
       <button
         className="p-1 border border-black rounded disabled:opacity-50"
         onClick={previousButtonHandler}

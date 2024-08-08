@@ -9,10 +9,13 @@ const Viewers = () => {
 
   return (
     <div className="flex w-full divide-x divide-slate-500 min-h-[calc(100%-56px)] max-h-[calc(100%-56px)]">
-      <MarkingSchemeListViewer
-        selectedMarkingScheme={selectedMarkingScheme}
-        setSelectedMarkingScheme={setSelectedMarkingScheme}
-      />
+      <div className="w-96">
+        <MarkingSchemeListViewer
+          selectedMarkingScheme={selectedMarkingScheme}
+          setSelectedMarkingScheme={setSelectedMarkingScheme}
+        />
+      </div>
+
       <MarkingSchemeViewer selectedMarkingScheme={selectedMarkingScheme} />
     </div>
   );

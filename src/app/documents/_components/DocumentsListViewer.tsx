@@ -55,7 +55,7 @@ const DocumentsListViewer = ({
   };
 
   return (
-    <div className="w-96 min-h-full h-full max-h-full">
+    <div className="w-full min-h-full h-full max-h-full">
       <div className="flex justify-between w-full p-2 font-medium border-b border-slate-500">
         <h4 className="">Documents</h4>
         <p>{totalResultCount}</p>

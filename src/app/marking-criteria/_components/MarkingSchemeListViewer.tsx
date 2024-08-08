@@ -61,6 +61,7 @@ const MarkingSchemeListViewer = ({
         {isLoading ? (
           <div className="p-2">Loading...</div>
         ) : (
+          markingScheme &&
           markingScheme.map((markingSchemeSingle) => (
             <div key={markingSchemeSingle.id} className="w-full">
               <button
