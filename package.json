@@ -11,7 +11,8 @@
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "npx tsx ./src/db/seed/seed.ts"
+    "db:seed": "npx tsx ./src/db/seed/seed.ts",
+    "db:run": "npx tsx ./src/db/seed/runTestPermutations.ts"
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.620.0",

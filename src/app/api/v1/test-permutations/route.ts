@@ -23,7 +23,7 @@ export async function GET(
     const offsetAndLimitSchema = z.object({
       markingRunId: z.string().uuid().nullable().optional(),
       offset: z.coerce.number().min(0).max(100000),
-      limit: z.coerce.number().min(0).max(100),
+      limit: z.coerce.number().min(0).max(10000),
     });
 
     const validatedOffsetAndLimit = offsetAndLimitSchema.parse(params);

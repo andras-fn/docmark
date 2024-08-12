@@ -1,18 +1,52 @@
 import { db } from "@/db/client";
-import { count, asc, ilike } from "drizzle-orm";
+import { count, asc, ilike, eq } from "drizzle-orm";
 import { z } from "zod";
 import {
   markingScheme,
   insertMarkingSchemeSchema,
+  type MarkingScheme,
 } from "@/db/schemas/markingScheme";
 import {
   testCriteria,
   insertTestCriteriaSchema,
+  type TestCriteria,
 } from "@/db/schemas/testCriteria";
 
-import type { TestCriteria } from "@/db/schemas/testCriteria";
+interface MarkingSchemeWithCriteria extends MarkingScheme {
+  testCriteria: TestCriteria[];
+}
 
 // GET - get all documents
+
+export function reduceResults(
+  results: {
+    markingScheme: MarkingScheme | null;
+    testCriteria?: TestCriteria | null;
+  }[]
+): Promise<MarkingSchemeWithCriteria[]> {
+  const result: MarkingSchemeWithCriteria[] = results.reduce(
+    (acc: MarkingSchemeWithCriteria[], item) => {
+      const { markingScheme, testCriteria } = item;
+      const existingScheme = acc.find(
+        (scheme: MarkingSchemeWithCriteria) => scheme.id === markingScheme?.id
+      );
+
+      if (existingScheme && testCriteria) {
+        existingScheme.testCriteria.push(testCriteria);
+      } else if (testCriteria) {
+        acc.push({
+          ...(markingScheme as MarkingScheme),
+          testCriteria: [testCriteria],
+        });
+      }
+
+      return acc;
+    },
+    []
+  );
+
+  return Promise.resolve(result);
+}
 
 export async function GET(request: Request) {
   try {
@@ -40,18 +74,42 @@ export async function GET(request: Request) {
     // validate the search parameter
     const term = searchSchema.parse(search);
 
-    const query = db.query.markingScheme.findMany({
-      limit:
-        validatedOffsetAndLimit.limit > 0 ? validatedOffsetAndLimit.limit : 20,
-      offset: validatedOffsetAndLimit.offset,
-      orderBy: [asc(markingScheme.createdAt)],
-      where: term
-        ? (markingScheme, { ilike }) => ilike(markingScheme.name, `%${term}%`)
-        : undefined,
-      with: {
-        testCriteria: true,
-      },
-    });
+    // const query = db.query.markingScheme.findMany({
+    //   limit:
+    //     validatedOffsetAndLimit.limit > 0 ? validatedOffsetAndLimit.limit : 20,
+    //   offset: validatedOffsetAndLimit.offset,
+    //   orderBy: [asc(markingScheme.createdAt)],
+    //   where: term
+    //     ? (markingScheme, { ilike }) => ilike(markingScheme.name, `%${term}%`)
+    //     : undefined,
+    //   with: {
+    //     testCriteria: true,
+    //   },
+    // });
+
+    const query = db
+      .select({
+        markingScheme: markingScheme,
+        testCriteria: testCriteria,
+      })
+      .from(markingScheme)
+      .leftJoin(
+        testCriteria,
+        eq(markingScheme.id, testCriteria.markingSchemeId)
+      )
+      .limit(
+        validatedOffsetAndLimit.limit > 0 ? validatedOffsetAndLimit.limit : 20
+      )
+      .offset(validatedOffsetAndLimit.offset)
+      .orderBy(asc(markingScheme.createdAt));
+
+    if (term) {
+      query.where(ilike(markingScheme.name, `%${term}%`));
+    }
+    console.log("ttt");
+
+    const queryResults = await query;
+    console.log(queryResults);
 
     const countQuery = db
       .select({ count: count() })
@@ -60,11 +118,13 @@ export async function GET(request: Request) {
 
     const [results, totalResultCount] = await Promise.all([query, countQuery]);
 
-    //console.log(results);
+    const result: MarkingScheme[] = await reduceResults(queryResults);
+
+    console.log(result);
 
     return Response.json(
       {
-        data: results,
+        data: result,
         pagination: {
           offset: validatedOffsetAndLimit.offset,
           limit:

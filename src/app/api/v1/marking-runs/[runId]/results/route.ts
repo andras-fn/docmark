@@ -6,6 +6,7 @@ import {
   InsertMarkingRunResults,
 } from "@/db/schemas/markingRunResults";
 import { markingRun } from "@/db/schemas/markingRun";
+import { document } from "@/db/schemas/document";
 import { eq, and, count } from "drizzle-orm";
 
 export async function GET(request: Request, { params }: { params: any }) {
@@ -33,6 +34,8 @@ export async function GET(request: Request, { params }: { params: any }) {
         .where(eq(markingRunResults.markingRunId, markingRunId)),
       db.select().from(markingRun).where(eq(markingRun.id, markingRunId)),
     ]);
+
+    console.log(results);
 
     const groupByMarkingScheme = (data) => {
       return data.reduce((acc, current) => {

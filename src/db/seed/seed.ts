@@ -32,12 +32,15 @@ import {
   console.log(documentGroupResults);
 
   // create documents
-  const documentWithDocumentGroupIds = documents.map((document: any) => {
-    return {
-      ...document,
-      documentGroupId: documentGroupResults[0].id,
-    };
-  });
+  const documentWithDocumentGroupIds = documents.map(
+    (document: any, i: number) => {
+      return {
+        ...document,
+        documentGroupId: documentGroupResults[0].id,
+        documentName: `Patient ${i + 1}`,
+      };
+    }
+  );
 
   const documentResults = await db
     .insert(document)

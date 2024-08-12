@@ -87,7 +87,9 @@ const CreateMarkingRunButtonModal = () => {
       try {
         // loop over the document groups and fetch the documents
         const documentPromises = selectedDocumentGroups.map((group) => {
-          return fetch(`/api/v1/documents?documentGroupId=${group.id}`);
+          return fetch(
+            `/api/v1/documents?documentGroupId=${group.id}&limit=2000`
+          );
         });
 
         const documentResponses = await Promise.all(documentPromises);

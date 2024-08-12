@@ -15,7 +15,7 @@ const MarkingSchemeListViewer = ({
     <div className="w-full min-h-full h-full max-h-full">
       <div className="flex justify-between w-full p-2 font-medium border-b border-slate-500">
         <h4 className="">Marking Schemes</h4>
-        <p>{markingSchemes.length}</p>
+        <p>{markingSchemes && markingSchemes.length}</p>
       </div>
 
       <ScrollArea className="max-h-[calc(100%-41px-44px)] min-h-[calc(100%-41px-44px)] h-[calc(100%-41px-44px)]">

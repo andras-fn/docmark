@@ -7,6 +7,9 @@ const ResultsViewer = () => {
       testDescription: "Test 1",
       evaluation: "PASS",
       comment: "Test 1 comment",
+      numberTotal: 20,
+      numberPassed: 10,
+      numberFailed: 10,
     },
     {
       testDescription: "Test 2",
@@ -25,38 +28,32 @@ const ResultsViewer = () => {
     },
   ];
   return (
-    <div className="w-full flex flex-col divide-y divide-slate-500 h-full">
-      <div className="flex flex-col gap-y-1 w-full p-2">
-        <p>Marking Scheme - {}</p>
-        <p>Document Group - {}</p>
-      </div>
-      <div className="flex flex-col gap-y-2 w-full p-2 h-full">
-        {/* make this section scrollable */}
-        <div className="border rounded border-slate-500 divide-y divide-slate-500">
-          <div className="p-2">Summary</div>
+    <div className="flex flex-col gap-y-2 w-full p-2 h-full">
+      {/* make this section scrollable */}
+      <div className="border rounded border-slate-500 divide-y divide-slate-500">
+        <div className="p-2">Summary</div>
 
-          <div className="flex flex-col divide-y divide-slate-500">
-            {testTests.map((test) => (
-              <TestResultCard test={test} />
-            ))}
-          </div>
+        <div className="flex flex-col divide-y divide-slate-500">
+          {testTests.map((test) => (
+            <TestResultCard test={test} />
+          ))}
         </div>
-        <div className="border rounded border-slate-500 divide-y divide-slate-500">
-          <div className="p-2">Key Diagnosis</div>
-          <div className="p-2">Key Diagnosis results go here</div>
-        </div>
-        <div className="border rounded border-slate-500 divide-y divide-slate-500">
-          <div className="p-2">Any New Medication</div>
-          <div className="p-2">Any New Medication results go here</div>
-        </div>
-        <div className="border rounded border-slate-500 divide-y divide-slate-500">
-          <div className="p-2">Urgency</div>
-          <div className="p-2">Urgency results go here</div>
-        </div>
-        <div className="border rounded border-slate-500 divide-y divide-slate-500">
-          <div className="p-2">Next Actions</div>
-          <div className="p-2">Next Actions results go here</div>
-        </div>
+      </div>
+      <div className="border rounded border-slate-500 divide-y divide-slate-500">
+        <div className="p-2">Key Diagnosis</div>
+        <div className="p-2">Key Diagnosis results go here</div>
+      </div>
+      <div className="border rounded border-slate-500 divide-y divide-slate-500">
+        <div className="p-2">Any New Medication</div>
+        <div className="p-2">Any New Medication results go here</div>
+      </div>
+      <div className="border rounded border-slate-500 divide-y divide-slate-500">
+        <div className="p-2">Urgency</div>
+        <div className="p-2">Urgency results go here</div>
+      </div>
+      <div className="border rounded border-slate-500 divide-y divide-slate-500">
+        <div className="p-2">Next Actions</div>
+        <div className="p-2">Next Actions results go here</div>
       </div>
     </div>
   );

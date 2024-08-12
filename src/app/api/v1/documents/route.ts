@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     const offsetAndLimitSchema = z.object({
       documentGroupId: z.string().uuid().nullable().optional(),
       offset: z.coerce.number().min(0).max(100000),
-      limit: z.coerce.number().min(0).max(100),
+      limit: z.coerce.number().min(0).max(10000),
     });
 
     const validatedOffsetAndLimit = offsetAndLimitSchema.parse(params);

@@ -14,7 +14,11 @@ import { document } from "@/db/schemas/document";
 
 import OpenAI from "openai";
 import { systemMessage } from "@/lib/systemMessage";
-import { comment } from "postcss";
+
+import { reduceResults } from "@/app/api/v1/marking-schemes/route";
+
+import { markingScheme } from "@/db/schemas/markingScheme";
+import { testCriteria } from "@/db/schemas/testCriteria";
 
 export async function POST(
   request: Request,
@@ -55,18 +59,37 @@ export async function POST(
       .from(document)
       .where(eq(document.id, testPermutation.documentId));
 
-    const markingSchemeQuery = db.query.markingScheme.findMany({
-      where: (markingScheme, { eq }) =>
-        eq(markingScheme.id, testPermutation.markingSchemeId),
-      with: {
-        testCriteria: true,
-      },
-    });
+    // const markingSchemeQuery = db.query.markingScheme.findMany({
+    //   where: (markingScheme, { eq }) =>
+    //     eq(markingScheme.id, testPermutation.markingSchemeId),
+    //   with: {
+    //     testCriteria: true,
+    //   },
+    // });
+
+    const markingSchemeQuery = db
+      .select({
+        markingScheme: markingScheme,
+        testCriteria: {
+          testCriteriaId: testCriteria.id,
+          testDescription: testCriteria.testDescription,
+          category: testCriteria.category,
+        },
+      })
+      .from(markingScheme)
+      .leftJoin(
+        testCriteria,
+        eq(markingScheme.id, testPermutation.markingSchemeId)
+      );
 
     const [documentResult, markingSchemeResult] = await Promise.all([
       documentQuery,
       markingSchemeQuery,
     ]);
+
+    const reducedMarkingSchemeResult = await reduceResults(markingSchemeResult);
+
+    console.log(JSON.stringify(reducedMarkingSchemeResult, null, 2));
 
     // console.log(`Document: ${JSON.stringify(documentResult, null, 2)}`);
     // console.log(
@@ -77,7 +100,7 @@ export async function POST(
     const text = `${JSON.stringify(
       {
         document: [documentResult],
-        markingCriteria: [markingSchemeResult],
+        markingCriteria: [reducedMarkingSchemeResult],
       },
       null,
       2
@@ -155,6 +178,7 @@ export async function POST(
     //console.log(markingResults);
 
     // update database with the jobId
+    console.log("Updating markingRunPermutations");
     const markingRunPermutationsUpdate = db
       .update(markingRunPermutations)
       .set({
@@ -168,6 +192,7 @@ export async function POST(
       })
       .where(eq(markingRunPermutations.id, testPermutationId));
 
+    console.log("Updating markingRunResults");
     const markingRunResultsUpdate = db
       .insert(markingRunResults)
       .values(markingResults)
