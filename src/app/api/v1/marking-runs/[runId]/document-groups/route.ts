@@ -6,11 +6,19 @@ import {
   markingRunResults,
   MarkingRunResults,
 } from "@/db/schemas/markingRunResults";
+import { validateRequest } from "@/auth/auth";
 
 export async function GET(
   request: Request,
   { params }: { params: { runId: string } }
 ) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     const markingRunId = params.runId;
 
@@ -40,21 +48,13 @@ export async function GET(
     type NewDocumentGroup = {
       id: string;
       name: string;
-      tests: {
-        totalNumber: number;
-        passNumber: number;
-        failNumber: number;
-      };
-      documents: {
-        totalNumber: number;
-        passNumber: number;
-        failNumber: number;
-      };
+      totalNumber: number;
+      passNumber: number;
+      failNumber: number;
     };
 
     const aggregatedResults: NewDocumentGroup[] = documentGroups.reduce(
       (acc: NewDocumentGroup[], item) => {
-        console.log(item.marking_run_results);
         const { id, name } = item.document_groups;
         const evaluation: string | null =
           item.marking_run_results?.evaluation ?? null;
@@ -70,56 +70,22 @@ export async function GET(
           documentGroup = {
             id,
             name,
-            tests: {
-              totalNumber: 0,
-              passNumber: 0,
-              failNumber: 0,
-            },
-            documents: {
-              totalNumber: 0,
-              passNumber: 0,
-              failNumber: 0,
-            },
+            totalNumber: 0,
+            passNumber: 0,
+            failNumber: 0,
           };
           acc.push(documentGroup);
         }
 
         // Increment the total number
-        documentGroup.tests.totalNumber += 1;
+        documentGroup.totalNumber += 1;
 
         // Increment the pass or fail number based on the evaluation
         if (evaluation === "PASS") {
-          documentGroup.tests.passNumber += 1;
+          documentGroup.passNumber += 1;
         } else if (evaluation === "FAIL") {
-          documentGroup.tests.failNumber += 1;
+          documentGroup.failNumber += 1;
         }
-
-        // documents
-        // Get the unique document IDs from marking_run_results
-        const documentIds: string[] = item.marking_run_results
-          ? Array.from(
-              new Set(
-                item.marking_run_results.map((result) => result.documentId)
-              )
-            )
-          : [];
-
-        // Increment the total number of documents
-        documentGroup.documents.totalNumber += documentIds.length;
-
-        // Increment the pass or fail number based on the evaluation of each document
-        documentIds.forEach((documentId) => {
-          const documentResult = item.marking_run_results?.find(
-            (result) => result.documentId === documentId
-          );
-          if (documentResult) {
-            if (documentResult.evaluation === "PASS") {
-              documentGroup.documents.passNumber += 1;
-            } else if (documentResult.evaluation === "FAIL") {
-              documentGroup.documents.failNumber += 1;
-            }
-          }
-        });
 
         return acc;
       },

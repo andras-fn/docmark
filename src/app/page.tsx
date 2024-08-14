@@ -1,15 +1,18 @@
-export default function Home() {
+import { validateRequest } from "@/auth/auth";
+import { redirect } from "next/navigation";
+
+export default async function Home() {
+  const { user } = await validateRequest();
+  if (!user) {
+    return redirect("/login");
+  }
   return (
-    <main className="">
-      <p>Here you can create marking criteria for docman ai.</p>{" "}
-      <p>
-        First you create a bunch of descriptions (these are used as the marking
-        criteria).
-      </p>{" "}
-      <p>
-        Then you assign these descriptions to a category in a marking criteria
-        that you create.
-      </p>
-    </main>
+    <>
+      <h1>Hi, {JSON.stringify(user)}!</h1>
+      <p>Your user ID is {user.id}.</p>
+      <form>
+        <button>Sign out</button>
+      </form>
+    </>
   );
 }

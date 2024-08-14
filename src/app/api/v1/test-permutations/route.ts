@@ -6,10 +6,20 @@ import {
   MarkingRunPermutations,
 } from "@/db/schemas/markingRunPermutations";
 
+import { validateRequest } from "@/auth/auth";
+
 export async function GET(
   request: Request,
   { params }: { params: { testPermutationId: string } }
 ) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   try {
     // get the url params
     const url = new URL(request.url);

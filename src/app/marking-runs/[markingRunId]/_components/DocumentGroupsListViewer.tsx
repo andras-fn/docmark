@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CompactPagination from "@/components/CompactPagination";
-import type { DocumentGroup } from "@/db/schemas/documentGroup";
+import type { DocumentGroupWithCounts } from "@/db/schemas/documentGroup";
 
 const DocumentGroupsListViewer = ({
   markingRunId,
@@ -11,11 +11,13 @@ const DocumentGroupsListViewer = ({
   setSelectedDocumentGroup,
 }: {
   markingRunId: string;
-  documentGroups: DocumentGroup[];
-  setDocumentGroups: React.Dispatch<React.SetStateAction<DocumentGroup[]>>;
-  selectedDocumentGroup: DocumentGroup | null;
+  documentGroups: DocumentGroupWithCounts[];
+  setDocumentGroups: React.Dispatch<
+    React.SetStateAction<DocumentGroupWithCounts[]>
+  >;
+  selectedDocumentGroup: DocumentGroupWithCounts | null;
   setSelectedDocumentGroup: React.Dispatch<
-    React.SetStateAction<DocumentGroup | null>
+    React.SetStateAction<DocumentGroupWithCounts | null>
   >;
 }) => {
   const [loading, setLoading] = useState(false);
@@ -45,7 +47,9 @@ const DocumentGroupsListViewer = ({
     fetchData();
   }, []);
 
-  const documentGroupClickHandler = (documentGroup: DocumentGroup) => {
+  const documentGroupClickHandler = (
+    documentGroup: DocumentGroupWithCounts
+  ) => {
     console.log(documentGroup);
     // if a selectedDocumentGroup is selected then unselect it
     if (
@@ -68,7 +72,7 @@ const DocumentGroupsListViewer = ({
           <div className="p-2">Loading...</div>
         ) : (
           documentGroups &&
-          documentGroups.map((group: DocumentGroup) => (
+          documentGroups.map((group: DocumentGroupWithCounts) => (
             <div
               key={group.id}
               className={`m-2 border rounded border-slate-500 hover:outline-none hover:ring-2 hover:ring-slate-700 hover:border-transparent ${
@@ -81,44 +85,22 @@ const DocumentGroupsListViewer = ({
                 className="text-left text-sm w-full"
                 onClick={(e) => documentGroupClickHandler(group)}
               >
-                <div className="flex flex-col">
-                  <div className="text-sm p-2 font-bold">{group.name}</div>
-                  <table className="min-w-full bg-white">
-                    <thead>
-                      <tr>
-                        <th className="py-1 px-2 border-b border-r border-gray-200 bg-gray-50 text-left text-sm"></th>
-                        <th className="py-1 px-2 border-b border-gray-200 bg-gray-50 text-left text-sm">
-                          Documents
-                        </th>
-                        <th className="py-1 px-2 border-b border-gray-200 bg-gray-50 text-left text-sm">
-                          Tests
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="py-1 px-2 border-r border-gray-200 text-sm bg-gray-50 font-bold">
-                          Total
-                        </td>
-                        <td className="py-1 px-2 border-gray-200">500</td>
-                        <td className="py-1 px-2 border-gray-200">2000</td>
-                      </tr>
-                      <tr>
-                        <td className="py-1 px-2 border-r border-gray-200 text-sm bg-gray-50 font-bold">
-                          Pass
-                        </td>
-                        <td className="py-1 px-2 border-gray-200">400</td>
-                        <td className="py-1 px-2 border-gray-200">1500</td>
-                      </tr>
-                      <tr>
-                        <td className="py-1 px-2 border-r border-gray-200 text-sm bg-gray-50 font-bold">
-                          Fail
-                        </td>
-                        <td className="py-1 px-2 border-gray-200">100</td>
-                        <td className="py-1 px-2 border-gray-200">500</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div className="flex flex-col p-2">
+                  <div className="text-sm font-bold">{group.name}</div>
+                  <div className="flex justify-between">
+                    <div className="flex gap-x-1">
+                      <p className="font-semibold">Total:</p>
+                      <p>{group.totalNumber}</p>
+                    </div>
+                    <div className="flex gap-x-1">
+                      <p className="font-semibold">Pass:</p>
+                      <p>{group.passNumber}</p>
+                    </div>
+                    <div className="flex gap-x-1">
+                      <p className="font-semibold">Fail:</p>
+                      <p>{group.failNumber}</p>
+                    </div>
+                  </div>
                 </div>
               </button>
             </div>

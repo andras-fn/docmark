@@ -12,6 +12,8 @@ import {
   type TestCriteria,
 } from "@/db/schemas/testCriteria";
 
+import { validateRequest } from "@/auth/auth";
+
 interface MarkingSchemeWithCriteria extends MarkingScheme {
   testCriteria: TestCriteria[];
 }
@@ -57,6 +59,13 @@ export function reduceResults(
 }
 
 export async function GET(request: Request) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     // get the url params
     const url = new URL(request.url);
@@ -152,6 +161,13 @@ export async function GET(request: Request) {
 
 // POST - create a document
 export async function POST(request: Request) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     const requestBody = await request.json();
 

@@ -50,7 +50,7 @@ const ResultsViewer = ({ selectedDocument }: { selectedDocument: any }) => {
           </div>
         </div>
       </div>
-      <ScrollArea className=" max-h-[calc(100%-1px)] min-h-[calc(100%-1px)] h-[calc(100%-1px)] p-2 ">
+      <ScrollArea className=" max-h-[calc(100%-55px)] min-h-[calc(100%-55px)] h-[calc(100%-55px)] p-2 ">
         <div className="flex flex-col gap-y-2">
           {/* make this section scrollable */}
           <div className="border rounded border-slate-500 divide-y divide-slate-500">

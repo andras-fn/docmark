@@ -5,8 +5,16 @@ import {
   documentGroup,
   insertDocumentGroupSchema,
 } from "@/db/schemas/documentGroup";
+import { validateRequest } from "@/auth/auth";
 
 export async function GET(request: Request, { params }: { params: any }) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     const groupId = params.groupId;
 

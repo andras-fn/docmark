@@ -4,8 +4,11 @@ import DocumentGroupsListViewer from "./DocumentGroupsListViewer";
 import MarkingSchemeListViewer from "./MarkingSchemeListViewer";
 import ResultsViewer from "./ResultsViewer";
 import DocumentsListViewer from "./DocumentsListViewer";
-import { DocumentGroup } from "@/db/schemas/documentGroup";
-import { MarkingScheme } from "@/db/schemas/markingScheme";
+import {
+  DocumentGroup,
+  DocumentGroupWithCounts,
+} from "@/db/schemas/documentGroup";
+import { MarkingSchemeWithCounts } from "@/db/schemas/markingScheme";
 
 const MarkingSchemeViewer = ({
   markingRunData,
@@ -27,12 +30,12 @@ const MarkingSchemeViewer = ({
   // document group state
   const [documentGroups, setDocumentGroups] = useState([]);
   const [selectedDocumentGroup, setSelectedDocumentGroup] =
-    useState<DocumentGroup | null>(null);
+    useState<DocumentGroupWithCounts | null>();
 
   // marking scheme state
   const [markingSchemes, setMarkingSchemes] = useState([]);
   const [selectedMarkingScheme, setSelectedMarkingScheme] =
-    useState<MarkingScheme | null>();
+    useState<MarkingSchemeWithCounts | null>();
 
   // dopcuments state
   const [documents, setDocuments] = useState([]);

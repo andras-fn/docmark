@@ -9,10 +9,19 @@ import { createPlatformServiceJob } from "@/lib/createPlatformServiceJob";
 import { eq, and, count } from "drizzle-orm";
 import { document } from "@/db/schemas/document";
 
+import { validateRequest } from "@/auth/auth";
+
 export async function POST(
   request: Request,
   { params }: { params: { testPermutationId: string } }
 ) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     // get the test permutation id from the url
     const testPermutationId = params.testPermutationId;

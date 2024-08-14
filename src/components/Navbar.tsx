@@ -1,7 +1,41 @@
 import Link from "next/link";
-import { File, BookOpenCheck, Play, Settings } from "lucide-react";
+import {
+  File,
+  BookOpenCheck,
+  Play,
+  Settings,
+  LogIn,
+  LogOut,
+} from "lucide-react";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { lucia, validateRequest } from "@/auth/auth";
+
+interface ActionResult {
+  error;
+}
 
 const Navbar = () => {
+  async function logout(): Promise<ActionResult> {
+    "use server";
+    const { session } = await validateRequest();
+    if (!session) {
+      return {
+        error: "Unauthorized",
+      };
+    }
+
+    await lucia.invalidateSession(session.id);
+
+    const sessionCookie = lucia.createBlankSessionCookie();
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+    return redirect("/login");
+  }
+
   return (
     <div className="w-48 h-full flex flex-col bg-[#242424] text-white">
       <div className="w-full flex items-center p-2 gap-x-2">
@@ -88,6 +122,18 @@ const Navbar = () => {
           >
             <Settings /> Config
           </Link>
+          <Link
+            href="/login"
+            className="p-2 hover:bg-neutral-700 text-lg cursor-pointer flex items-center gap-x-2"
+          >
+            <LogIn /> Login
+          </Link>
+
+          <form action={logout} className="w-full">
+            <button className="p-2 hover:bg-neutral-700 text-lg cursor-pointer flex items-center gap-x-2 w-full">
+              <LogOut /> Sign out
+            </button>
+          </form>
         </div>
       </div>
     </div>

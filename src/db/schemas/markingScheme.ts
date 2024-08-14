@@ -16,7 +16,11 @@ export const markingScheme = docmarkaiSchema.table("marking_scheme", {
 export const insertMarkingSchemeSchema = createInsertSchema(markingScheme);
 
 export type MarkingScheme = typeof markingScheme.$inferSelect;
-
+export type MarkingSchemeWithCounts = MarkingScheme & {
+  totalNumber: number;
+  passNumber: number;
+  failNumber: number;
+};
 export const markingSchemeRelations = relations(markingScheme, ({ many }) => ({
   testCriteria: many(testCriteria),
 }));

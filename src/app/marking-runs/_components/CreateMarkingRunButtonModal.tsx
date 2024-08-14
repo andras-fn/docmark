@@ -11,14 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import { useState, useEffect } from "react";
 import ComboBoxMultiSelect from "./ComboBoxMultiSelect";
@@ -33,8 +25,12 @@ const CreateMarkingRunButtonModal = () => {
   const [markingSchemes, setMarkingSchemes] = useState([]);
 
   const [markingRunName, setMarkingRunName] = useState("");
-  const [selectedDocumentGroups, setSelectedDocumentGroups] = useState([]);
-  const [selectedMarkingSchemes, setSelectedMarkingSchemes] = useState([]);
+  const [selectedDocumentGroups, setSelectedDocumentGroups] = useState<
+    { id: string }[]
+  >([]);
+  const [selectedMarkingSchemes, setSelectedMarkingSchemes] = useState<
+    { id: string; testCriteria: any[] }[]
+  >([]);
 
   const [numberOfDocuments, setNumberOfDocuments] = useState(0);
 
@@ -338,10 +334,7 @@ const CreateMarkingRunButtonModal = () => {
                 <p className="font-semibold">
                   Number of generated test permutations:
                 </p>
-                <p>
-                  {parseInt(numberOfDocuments) *
-                    parseInt(selectedMarkingSchemes.length)}
-                </p>
+                <p>{numberOfDocuments * selectedMarkingSchemes.length}</p>
               </div>
             </div>
           </div>

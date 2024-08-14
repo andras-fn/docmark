@@ -14,3 +14,8 @@ export const insertDocumentGroupSchema = createInsertSchema(documentGroup);
 
 export type DocumentGroup = typeof documentGroup.$inferSelect;
 export type NewDocumentGroup = typeof documentGroup.$inferInsert;
+export type DocumentGroupWithCounts = DocumentGroup & {
+  totalNumber: number;
+  passNumber: number;
+  failNumber: number;
+};

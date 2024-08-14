@@ -5,6 +5,8 @@ import { eq, and, count } from "drizzle-orm";
 import { db } from "@/db/client";
 import { isValidUUID } from "@/lib/isValidUUID";
 
+import { validateRequest } from "@/auth/auth";
+
 // Utility function to chunk an array into smaller arrays of a specified size
 function chunkArray(array: string | any[], size: number) {
   const results = [];
@@ -31,6 +33,13 @@ export async function POST(
   request: Request,
   { params }: { params: { runId: string } }
 ) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     const markingRunId = params.runId;
     console.log(markingRunId);

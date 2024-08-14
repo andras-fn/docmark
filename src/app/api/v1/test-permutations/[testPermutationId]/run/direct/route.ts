@@ -20,10 +20,19 @@ import { reduceResults } from "@/app/api/v1/marking-schemes/route";
 import { markingScheme } from "@/db/schemas/markingScheme";
 import { testCriteria } from "@/db/schemas/testCriteria";
 
+import { validateRequest } from "@/auth/auth";
+
 export async function POST(
   request: Request,
   { params }: { params: { testPermutationId: string } }
 ) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     // get the test permutation id from the url
     const testPermutationId = params.testPermutationId;

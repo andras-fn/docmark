@@ -21,6 +21,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 
 interface RowData {
+  id: any;
   runId: string;
 }
 
@@ -71,7 +72,6 @@ const ResultsTable = ({
                   onClick={() =>
                     router.push(`/marking-runs/${row.original.id}`)
                   }
-                  //onClick={() => rowClickHandler(row)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

@@ -7,10 +7,20 @@ import { getAssoToken } from "@/lib/getAssoToken";
 import { eq, and, count } from "drizzle-orm";
 import { getPlatformServiceJobStatus } from "@/lib/getPlatformServiceJobStatus";
 
+import { validateRequest } from "@/auth/auth";
+
 export async function GET(
   request: Request,
   { params }: { params: { testPermutationId: string } }
 ) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   try {
     console.log("GET /api/v1/test-permutations/[testPermutationId]/job-status");
     // get the test permutation id from the url

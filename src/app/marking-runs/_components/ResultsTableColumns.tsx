@@ -32,7 +32,7 @@ export const columns = [
     cell: ({ row }: { row: any }) => {
       return (
         <div className="">
-          {row.original.completedAt ? "Completed" : "In Progress"}
+          {row.original.completed ? "Completed" : "In Progress"}
         </div>
       );
     },
@@ -42,13 +42,13 @@ export const columns = [
     header: "Duration (s)",
     cell: ({ row }: { row: any }) => {
       const timeDifference =
-        (row.original.completedAt
-          ? Date.parse(row.original.completedAt)
-          : new Date().getTime()) - Date.parse(row.original.createdAt);
+        row.original.completedTime &&
+        new Date(row.original.completedTime).getTime() -
+          new Date(row.original.createdAt).getTime();
 
       return (
         <div className="">
-          {row.original.completedAt ? timeDifference / 1000 : "-"}
+          {row.original.completedTime ? timeDifference / 1000 : "-"}
         </div>
       );
     },

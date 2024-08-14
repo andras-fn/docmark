@@ -5,11 +5,19 @@ import {
   MarkingRunResults,
 } from "@/db/schemas/markingRunResults";
 import { document, Document } from "@/db/schemas/document";
+import { validateRequest } from "@/auth/auth";
 
 export async function GET(
   request: Request,
   { params }: { params: { runId: string } }
 ) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     const markingRunId = params.runId;
 
@@ -77,11 +85,6 @@ export async function GET(
       throw new Error("No documents found for this marking run");
     }
 
-    // const markingSchemes: MarkingScheme[] = await db
-    //   .select()
-    //   .from(markingScheme)
-    //   .where(inArray(markingScheme.id, markingSchemeIds.markingSchemes));
-    // return the job status
     return Response.json({ status: 200, data: documentResults });
   } catch (error) {
     console.error(error);

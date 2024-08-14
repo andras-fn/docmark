@@ -3,9 +3,18 @@ import { count, eq } from "drizzle-orm";
 import { z } from "zod";
 import { document, insertDocumentSchema } from "@/db/schemas/document";
 
+import { validateRequest } from "@/auth/auth";
+
 // GET - get all documents
 
 export async function GET(request: Request) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     // get the url params
     const url = new URL(request.url);
@@ -82,6 +91,13 @@ export async function GET(request: Request) {
 
 // POST - create a document
 export async function POST(request: Request) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     const requestBody = await request.json();
 

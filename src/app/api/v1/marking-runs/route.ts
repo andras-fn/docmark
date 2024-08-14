@@ -8,6 +8,8 @@ import { db } from "@/db/client";
 import { count, eq, ilike, desc } from "drizzle-orm";
 import { z } from "zod";
 
+import { validateRequest } from "@/auth/auth";
+
 const sqsClient = new SQSClient({
   region: process.env.SQS_URL?.split(".")[1],
   endpoint: process.env.SQS_URL,
@@ -15,6 +17,14 @@ const sqsClient = new SQSClient({
 
 // GET - fetch marking runs
 export async function GET(request: Request) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return Response.json(
+      { status: 401, issues: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   try {
     // get the url params
     const url = new URL(request.url);
@@ -40,14 +50,28 @@ export async function GET(request: Request) {
     // validate the search parameter
     const term = searchSchema.parse(search);
 
+    interface TransformedResult {
+      id: string;
+      createdAt: Date;
+      name: string;
+      numberOfDocumentGroups: number;
+      numberOfDocuments: number;
+      numberOfMarkingSchemes: number;
+      numberOfTestCriteria: number;
+      completed: boolean;
+      completedTime: Date | null;
+      documentGroups: string[];
+      markingSchemes: string[];
+    }
+
     // generate the drizzle query to fetch document groups
     const query = db
       .select()
       .from(markingRun)
-      // .leftJoin(
-      //   markingRunPermutations,
-      //   eq(markingRun.id, markingRunPermutations.markingRunId)
-      // )
+      .leftJoin(
+        markingRunPermutations,
+        eq(markingRun.id, markingRunPermutations.markingRunId)
+      )
       .orderBy(desc(markingRun.createdAt))
       .offset(validatedOffsetAndLimit.offset)
       .where(term ? ilike(markingRun.name, `%${term}%`) : undefined);
@@ -58,7 +82,7 @@ export async function GET(request: Request) {
       query.limit(20);
     }
 
-    const [results, totalResultCount] = await Promise.all([
+    const [rawResults, totalResultCount] = await Promise.all([
       query,
       db
         .select({ count: count() })
@@ -66,11 +90,51 @@ export async function GET(request: Request) {
         .where(term ? ilike(markingRun.name, `%${term}%`) : undefined),
     ]);
 
-    console.log(results);
+    console.log(rawResults);
+
+    const transformedResults: TransformedResult[] = rawResults.reduce<
+      TransformedResult[]
+    >((acc, row) => {
+      const markingRun = row.marking_runs;
+      const permutation = row.marking_run_permutations;
+
+      let existingRun = acc.find((run) => run.id === markingRun.id);
+
+      if (!existingRun) {
+        existingRun = {
+          id: markingRun.id,
+          createdAt: new Date(markingRun.createdAt),
+          name: markingRun.name,
+          numberOfDocumentGroups: markingRun.numberOfDocumentGroups,
+          numberOfDocuments: markingRun.numberOfDocuments,
+          numberOfMarkingSchemes: markingRun.numberOfMarkingSchemes,
+          numberOfTestCriteria: markingRun.numberOfTestCriteria,
+          completed: false,
+          completedTime: null,
+          documentGroups: [...(markingRun.documentGroups as string[])],
+          markingSchemes: [...(markingRun.markingSchemes as string[])],
+        };
+        acc.push(existingRun);
+      }
+
+      if (permutation?.status === "COMPLETED") {
+        existingRun.completed = true;
+        if (
+          permutation.completedTime !== null &&
+          new Date(
+            existingRun.completedTime === null ? 0 : existingRun.completedTime
+          ).getTime() < new Date(permutation.completedTime).getTime()
+        ) {
+          existingRun.completedTime = permutation.completedTime;
+        }
+      }
+
+      return acc;
+    }, []);
 
     return Response.json(
       {
-        data: results,
+        data: transformedResults,
         pagination: {
           offset: validatedOffsetAndLimit.offset,
           limit:
