@@ -76,4 +76,6 @@ import {
 
   console.log("--- Marking Scheme Results ---");
   console.log(markingSchemeResults);
+
+  process.exit(0);
 })();

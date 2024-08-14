@@ -31,5 +31,30 @@
                 "testDescription": "Next Actions should only be for the GP."
             }
         ]
+    },
+    {
+        "name": "Second Marking Scheme",
+        "testCriteria": [
+            {
+                "category": "summary",
+                "testDescription": "The summary should be present."
+            },
+            {
+                "category": "keyDiagnosis",
+                "testDescription": "The Key Diagnosis should be exactly as it is in the letter."
+            },
+            {
+                "category": "urgency",
+                "testDescription": "The urgency should be either Urgent or Non-Urgent."
+            },
+            {
+                "category": "anyNewMedication",
+                "testDescription": "Medication should be exactly as it appears in the letter."
+            },
+            {
+                "category": "nextActions",
+                "testDescription": "Next Actions should only be actions identified in the letter."
+            }
+        ]
     }
 ]

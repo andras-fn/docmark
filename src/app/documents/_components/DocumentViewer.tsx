@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const DocumentViewer = ({ selectedDocument }) => {
+const DocumentViewer = ({ selectedDocument }: { selectedDocument: any }) => {
   return (
     <div className="h-full w-full">
       <div className="flex justify-between w-full border-b border-slate-500 items-center">
@@ -38,7 +38,7 @@ const DocumentViewer = ({ selectedDocument }) => {
                 id="ai-results"
                 className="h-full  rounded-md border border-gray-400 p-4"
               >
-                {selectedDocument?.aiResults}
+                {JSON.stringify(selectedDocument?.aiResults, null, 2)}
               </ScrollArea>
             </div>
           </>

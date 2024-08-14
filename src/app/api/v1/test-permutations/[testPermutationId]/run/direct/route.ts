@@ -59,14 +59,6 @@ export async function POST(
       .from(document)
       .where(eq(document.id, testPermutation.documentId));
 
-    // const markingSchemeQuery = db.query.markingScheme.findMany({
-    //   where: (markingScheme, { eq }) =>
-    //     eq(markingScheme.id, testPermutation.markingSchemeId),
-    //   with: {
-    //     testCriteria: true,
-    //   },
-    // });
-
     const markingSchemeQuery = db
       .select({
         markingScheme: markingScheme,
@@ -79,22 +71,18 @@ export async function POST(
       .from(markingScheme)
       .leftJoin(
         testCriteria,
-        eq(markingScheme.id, testPermutation.markingSchemeId)
-      );
+        eq(markingScheme.id, testCriteria.markingSchemeId)
+      )
+      .where(eq(markingScheme.id, testPermutation.markingSchemeId));
 
     const [documentResult, markingSchemeResult] = await Promise.all([
       documentQuery,
       markingSchemeQuery,
     ]);
 
+    //console.log(JSON.stringify(markingSchemeResult, null, 2));
+
     const reducedMarkingSchemeResult = await reduceResults(markingSchemeResult);
-
-    console.log(JSON.stringify(reducedMarkingSchemeResult, null, 2));
-
-    // console.log(`Document: ${JSON.stringify(documentResult, null, 2)}`);
-    // console.log(
-    //   `Marking Scheme: ${JSON.stringify(markingSchemeResult, null, 2)}`
-    // );
 
     // generate text
     const text = `${JSON.stringify(

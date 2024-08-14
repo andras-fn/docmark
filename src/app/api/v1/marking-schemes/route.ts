@@ -21,7 +21,15 @@ interface MarkingSchemeWithCriteria extends MarkingScheme {
 export function reduceResults(
   results: {
     markingScheme: MarkingScheme | null;
-    testCriteria?: TestCriteria | null;
+
+    testCriteria?:
+      | {
+          testCriteriaId: string;
+          testDescription: string;
+          category: string;
+        }
+      | null
+      | undefined;
   }[]
 ): Promise<MarkingSchemeWithCriteria[]> {
   const result: MarkingSchemeWithCriteria[] = results.reduce(
