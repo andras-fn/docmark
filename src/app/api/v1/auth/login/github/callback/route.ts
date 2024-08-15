@@ -57,8 +57,8 @@ export async function GET(request: Request): Promise<Response> {
     const allowedUsersOriginal =
       process.env.ALLOWED_GITHUB_IDS?.split(",") ?? [];
     const allowedUsers = allowedUsersOriginal.map((id) => parseInt(id));
-    console.log(allowedUsers);
-    console.log(githubUser.id);
+    //console.log(allowedUsers);
+    //console.log(githubUser.id);
     if (!allowedUsers.includes(parseInt(githubUser.id))) {
       return new Response(null, {
         status: 403,
