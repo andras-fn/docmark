@@ -90,7 +90,7 @@ export async function GET(request: Request) {
       })
     );
 
-    console.log(result);
+    //console.log(result);
 
     return Response.json(
       {
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
   try {
     const requestBody = await request.json();
 
-    console.log(requestBody);
+    //console.log(requestBody);
 
     const parsedMarkingScheme = insertMarkingSchemeSchema.parse({
       name: requestBody.name,
