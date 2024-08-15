@@ -9,7 +9,9 @@ import * as markingScheme from "./schemas/markingScheme";
 import * as testCriteria from "./schemas/testCriteria";
 import * as markingRunResults from "./schemas/markingRunResults";
 
-const POSTGRES_URI = process.env.POSTGRES_URI;
+const POSTGRES_URI =
+  process.env.POSTGRES_URI ||
+  "postgresql://postgres:postgres@localhost:5432/docmarkai";
 
 if (!POSTGRES_URI) {
   throw new Error("POSTGRES_URI environment variable is not defined.");

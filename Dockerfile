@@ -10,7 +10,7 @@ FROM node:${NODE_VERSION}-alpine as base
 WORKDIR /usr/src/app
 
 # Clear npm cache and set registry
-RUN npm cache clean --force && npm config set registry https://registry.npmjs.org/
+RUN npm cache clean --force && npm i -g npm && npm config set registry https://registry.npmjs.org/
 
 ################################################################################
 # Create a stage for installing production dependencies.

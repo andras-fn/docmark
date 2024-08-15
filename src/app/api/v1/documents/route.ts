@@ -33,7 +33,7 @@ export async function GET(request: Request) {
 
     const validatedOffsetAndLimit = offsetAndLimitSchema.parse(params);
 
-    console.log(validatedOffsetAndLimit);
+    //console.log(validatedOffsetAndLimit);
 
     // generate the drizzle query to fetch document groups
     const query = db
