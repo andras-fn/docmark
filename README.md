@@ -16,6 +16,9 @@ Next take a copy of the ".env.example", rename the copy to ".env" and then popul
  - POSTGRES_URI 
  - GITHUB_CLIENT_ID 
  - GITHUB_CLIENT_SECRET
+ - ALLOWED_GITHUB_IDS
+
+ > **Note:** You can find your Github user id easily by going here and entering your Github username: https://caius.github.io/github_id
 ### Set up your database
 The rest of this README assumes that you have already set up a Postgres container with a database called "docmarkai".
 

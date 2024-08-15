@@ -33,7 +33,7 @@ export async function GET(request: Request): Promise<Response> {
     const existingUser = await db
       .select()
       .from(userTable)
-      .where(eq(userTable.id, githubUser.id));
+      .where(eq(userTable.githubId, githubUser.id));
 
     //console.log(existingUser);
 
@@ -50,6 +50,18 @@ export async function GET(request: Request): Promise<Response> {
         headers: {
           Location: "/",
         },
+      });
+    }
+
+    // check if user is in allowed list
+    const allowedUsersOriginal =
+      process.env.ALLOWED_GITHUB_IDS?.split(",") ?? [];
+    const allowedUsers = allowedUsersOriginal.map((id) => parseInt(id));
+    console.log(allowedUsers);
+    console.log(githubUser.id);
+    if (!allowedUsers.includes(parseInt(githubUser.id))) {
+      return new Response(null, {
+        status: 403,
       });
     }
 
