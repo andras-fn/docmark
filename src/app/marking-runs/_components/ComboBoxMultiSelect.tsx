@@ -28,7 +28,7 @@ const ComboBoxMultiSelect = ({
   const [open, setOpen] = useState(false);
 
   const selectHandler = (value) => {
-    console.log("select handler");
+    //console.log("select handler");
     // check if item is already in selectedData
     const itemIndex = selectedData.findIndex((item) => item.id === value);
 

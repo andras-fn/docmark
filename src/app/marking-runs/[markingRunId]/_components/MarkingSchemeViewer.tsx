@@ -48,7 +48,7 @@ const MarkingSchemeViewer = ({
         setMarkingRunResultsLoading(true);
         const response = await fetch(`/api/v1/marking-runs/${markingRunId}`);
         const data = await response.json();
-        console.log(data.data);
+        //console.log(data.data);
 
         // Process the response data here
         setMarkingRunResults(data.data);

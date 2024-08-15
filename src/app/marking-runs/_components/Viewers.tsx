@@ -19,7 +19,7 @@ const Viewers = () => {
         setIsLoading(true);
         const response = await fetch("/api/v1/marking-runs");
         const data = await response.json();
-        console.log(data.data);
+        //console.log(data.data);
         setMarkingRuns(data.data);
         setIsLoading(false);
       } catch (error) {

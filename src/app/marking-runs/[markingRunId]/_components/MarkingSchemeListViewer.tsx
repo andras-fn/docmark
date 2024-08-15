@@ -28,7 +28,7 @@ const MarkingSchemeListViewer = ({
           `/api/v1/marking-runs/${markingRunId}/marking-schemes`
         );
         const data = await response.json();
-        console.log(data.data);
+        //console.log(data.data);
 
         // Process the response data here
         setMarkingSchemes(data.data);
@@ -45,7 +45,7 @@ const MarkingSchemeListViewer = ({
   }, []);
 
   const markingSchemeClickHandler = (scheme: { id: any }) => {
-    console.log(scheme);
+    //console.log(scheme);
     // if a selectedMarkingScheme is selected then unselect it
     if (selectedMarkingScheme && selectedMarkingScheme.id === scheme.id) {
       setSelectedMarkingScheme(null);

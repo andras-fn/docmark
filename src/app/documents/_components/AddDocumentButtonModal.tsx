@@ -43,6 +43,9 @@ const AddDocumentButtonModal = () => {
       try {
         const response = await fetch("/api/v1/document-groups");
         const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message);
+        }
         // handle document group data
         setDocumentGroups(data.data);
       } catch (error) {

@@ -135,7 +135,7 @@ const CreateMarkingRunButtonModal = () => {
         return;
       }
 
-      console.log("Creating marking run");
+      //console.log("Creating marking run");
 
       const markingRunData = {
         name: markingRunName,
@@ -149,7 +149,7 @@ const CreateMarkingRunButtonModal = () => {
         markingSchemes: selectedMarkingSchemes.map((scheme) => scheme.id),
       };
 
-      console.log(JSON.stringify(markingRunData, null, 2));
+      //console.log(JSON.stringify(markingRunData, null, 2));
 
       // create the marking run
       const response = await fetch("/api/v1/marking-runs", {
@@ -161,7 +161,7 @@ const CreateMarkingRunButtonModal = () => {
       });
       const data = await response.json();
 
-      console.log(data);
+      //console.log(data);
 
       // check the response
       if (data.status !== 201) {
@@ -197,7 +197,7 @@ const CreateMarkingRunButtonModal = () => {
 
   const onDocumentGroupSearchChange = async (value: string) => {
     // fetch data based on search value
-    console.log(value);
+    //console.log(value);
     try {
       const response = await fetch(`/api/v1/document-groups?search=${value}`, {
         method: "GET",
@@ -207,7 +207,7 @@ const CreateMarkingRunButtonModal = () => {
       });
       const data = await response.json();
 
-      console.log(data);
+      //console.log(data);
 
       setDocumentGroups(data.data);
     } catch (error) {
@@ -228,12 +228,12 @@ const CreateMarkingRunButtonModal = () => {
       });
       const data = await response.json();
 
-      console.log(data);
+      //console.log(data);
 
       setMarkingSchemes(data.data);
     } catch (error) {
       // handle error
-      console.log(error);
+      //console.log(error);
     }
   };
 

@@ -1,6 +1,5 @@
 "use client";
 
-import Banner from "./Banner";
 import MarkingSchemeViewer from "./MarkingSchemeViewer";
 
 import { useEffect, useState } from "react";
@@ -17,7 +16,7 @@ const Viewer = ({ markingRunId }) => {
         setIsLoading(true);
         const response = await fetch(`/api/v1/marking-runs/${markingRunId}`);
         const data = await response.json();
-        console.log(data.data);
+        // console.log(data.data);
         // Process the response data here
         setData(data.data);
         setIsLoading(false);

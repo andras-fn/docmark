@@ -26,11 +26,11 @@ const DocumentGroupsListViewer = ({
           }`
         );
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setDocumentGroups(data.data);
         setTotalResultCount(data.pagination.totalResultCount);
-        console.log(data.pagination.totalResultCount);
-        console.log(data.pagination.totalResultCount / 40);
+        //console.log(data.pagination.totalResultCount);
+        //console.log(data.pagination.totalResultCount / 40);
         const pageCheck = parseInt(data.pagination.totalResultCount) / 40;
         if (pageCheck % 1 !== 0) {
           setNumberOfPages(parseInt(data.pagination.totalResultCount) / 40 + 1);

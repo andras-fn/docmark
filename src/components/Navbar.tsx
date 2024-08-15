@@ -12,10 +12,12 @@ import { cookies } from "next/headers";
 import { lucia, validateRequest } from "@/auth/auth";
 
 interface ActionResult {
-  error;
+  error: any;
 }
 
-const Navbar = () => {
+const Navbar = async () => {
+  const { session } = await validateRequest();
+
   async function logout(): Promise<ActionResult> {
     "use server";
     const { session } = await validateRequest();
@@ -122,18 +124,20 @@ const Navbar = () => {
           >
             <Settings /> Config
           </Link>
-          <Link
-            href="/login"
-            className="p-2 hover:bg-neutral-700 text-lg cursor-pointer flex items-center gap-x-2"
-          >
-            <LogIn /> Login
-          </Link>
-
-          <form action={logout} className="w-full">
-            <button className="p-2 hover:bg-neutral-700 text-lg cursor-pointer flex items-center gap-x-2 w-full">
-              <LogOut /> Sign out
-            </button>
-          </form>
+          {!session ? (
+            <Link
+              href="/login"
+              className="p-2 hover:bg-neutral-700 text-lg cursor-pointer flex items-center gap-x-2"
+            >
+              <LogIn /> Login
+            </Link>
+          ) : (
+            <form action={logout} className="w-full">
+              <button className="p-2 hover:bg-neutral-700 text-lg cursor-pointer flex items-center gap-x-2 w-full">
+                <LogOut /> Sign out
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>

@@ -50,7 +50,7 @@ const DocumentsListViewer = ({
   }, [selectedDocumentGroup, selectedMarkingScheme]);
 
   const documentClickHandler = (document) => {
-    console.log(document);
+    //console.log(document);
     setSelectedDocument(document);
   };
 

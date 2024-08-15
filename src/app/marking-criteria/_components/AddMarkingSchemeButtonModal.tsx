@@ -80,6 +80,9 @@ const AddMarkingSchemeButtonModal = () => {
         }),
       });
       const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
       // handle response data
       setSuccess(true);
       setError(false);

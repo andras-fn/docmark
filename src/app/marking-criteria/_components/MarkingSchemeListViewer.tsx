@@ -13,22 +13,22 @@ const MarkingSchemeListViewer = ({
   const [totalResultCount, setTotalResultCount] = useState(0);
 
   useEffect(() => {
-    console.log("use effect");
+    //console.log("use effect");
     const fetchData = async () => {
       try {
         setIsLoading(true); // Set loading state to true
-        console.log("starting fetch");
+        // console.log("starting fetch");
         const response = await fetch(
           `/api/v1/marking-schemes?&limit=40&offset=${
             currentPage > 1 ? (currentPage - 1) * 40 : 0
           }`
         );
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setMarkingScheme(data.data);
         setTotalResultCount(data.pagination.totalResultCount);
-        console.log(data.pagination.totalResultCount);
-        console.log(data.pagination.totalResultCount / 40);
+        //console.log(data.pagination.totalResultCount);
+        //console.log(data.pagination.totalResultCount / 40);
         const pageCheck = parseInt(data.pagination.totalResultCount) / 40;
         if (pageCheck % 1 !== 0) {
           setNumberOfPages(parseInt(data.pagination.totalResultCount) / 40 + 1);
@@ -47,7 +47,7 @@ const MarkingSchemeListViewer = ({
   }, [currentPage]);
 
   const markingSchemeClickHandler = (scheme) => {
-    console.log(scheme);
+    //console.log(scheme);
     setSelectedMarkingScheme(scheme);
   };
   return (
