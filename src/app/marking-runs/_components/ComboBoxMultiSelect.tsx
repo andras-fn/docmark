@@ -16,6 +16,22 @@ import {
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
+interface Item {
+  testCriteria: any;
+  id: number;
+  name: string;
+}
+
+interface ComboBoxMultiSelectProps {
+  dataArray: Item[];
+  selectedData: Item[];
+  setSelectedData: (data: Item[]) => void;
+  selectMessage: string;
+  searchMessage: string;
+  notFoundMessage: string;
+  onSearchChange: (value: string) => void;
+}
+
 const ComboBoxMultiSelect = ({
   dataArray,
   selectedData,
@@ -24,10 +40,10 @@ const ComboBoxMultiSelect = ({
   searchMessage,
   notFoundMessage,
   onSearchChange,
-}) => {
+}: ComboBoxMultiSelectProps) => {
   const [open, setOpen] = useState(false);
 
-  const selectHandler = (value) => {
+  const selectHandler = (value: number) => {
     //console.log("select handler");
     // check if item is already in selectedData
     const itemIndex = selectedData.findIndex((item) => item.id === value);
@@ -41,8 +57,14 @@ const ComboBoxMultiSelect = ({
     } else {
       // if it is not then add it
       setSelectedData([
-        ...selectedData,
-        dataArray.find((item) => item.id === value),
+        ...selectedData.map((item) => {
+          return { ...item, testCriteria: null };
+        }),
+        dataArray.find((item) => item.id === value) ?? {
+          id: 0,
+          name: "",
+          testCriteria: null,
+        },
       ]);
     }
   };

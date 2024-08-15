@@ -15,6 +15,12 @@ import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import ComboBoxMultiSelect from "./ComboBoxMultiSelect";
 
+interface Item {
+  testCriteria: any;
+  id: number;
+  name: string;
+}
+
 const CreateMarkingRunButtonModal = () => {
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -25,12 +31,12 @@ const CreateMarkingRunButtonModal = () => {
   const [markingSchemes, setMarkingSchemes] = useState([]);
 
   const [markingRunName, setMarkingRunName] = useState("");
-  const [selectedDocumentGroups, setSelectedDocumentGroups] = useState<
-    { id: string }[]
-  >([]);
-  const [selectedMarkingSchemes, setSelectedMarkingSchemes] = useState<
-    { id: string; testCriteria: any[] }[]
-  >([]);
+  const [selectedDocumentGroups, setSelectedDocumentGroups] = useState<Item[]>(
+    []
+  );
+  const [selectedMarkingSchemes, setSelectedMarkingSchemes] = useState<Item[]>(
+    []
+  );
 
   const [numberOfDocuments, setNumberOfDocuments] = useState(0);
 
@@ -290,7 +296,9 @@ const CreateMarkingRunButtonModal = () => {
                 <ComboBoxMultiSelect
                   dataArray={documentGroups}
                   selectedData={selectedDocumentGroups}
-                  setSelectedData={setSelectedDocumentGroups}
+                  setSelectedData={(data: Item[]) =>
+                    setSelectedDocumentGroups(data)
+                  }
                   selectMessage="Select Document Groups"
                   searchMessage="Search Document Groups"
                   notFoundMessage="No Document Groups Found"

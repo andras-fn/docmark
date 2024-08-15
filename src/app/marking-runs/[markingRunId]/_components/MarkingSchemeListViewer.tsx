@@ -11,9 +11,13 @@ const MarkingSchemeListViewer = ({
 }: {
   markingRunId: string;
   markingSchemes: any;
-  setMarkingSchemes: React.Dispatch<React.SetStateAction<any>>;
+  setMarkingSchemes: React.Dispatch<
+    React.SetStateAction<MarkingSchemeWithCounts[]>
+  >;
   selectedMarkingScheme: MarkingSchemeWithCounts | null;
-  setSelectedMarkingScheme: React.Dispatch<React.SetStateAction<any>>;
+  setSelectedMarkingScheme: React.Dispatch<
+    React.SetStateAction<MarkingSchemeWithCounts | null>
+  >;
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<boolean | null>(null);
@@ -44,7 +48,7 @@ const MarkingSchemeListViewer = ({
     fetchData();
   }, []);
 
-  const markingSchemeClickHandler = (scheme: { id: any }) => {
+  const markingSchemeClickHandler = (scheme: MarkingSchemeWithCounts) => {
     //console.log(scheme);
     // if a selectedMarkingScheme is selected then unselect it
     if (selectedMarkingScheme && selectedMarkingScheme.id === scheme.id) {

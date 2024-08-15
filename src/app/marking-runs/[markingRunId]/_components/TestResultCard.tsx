@@ -1,4 +1,12 @@
-const TestResultCard = ({ test }) => {
+const TestResultCard = ({
+  test,
+}: {
+  test: {
+    evaluation: string;
+    testDescription: string;
+    comment: string;
+  };
+}) => {
   return (
     <div className="flex flex-col px-2 py-1">
       <div className="flex gap-x-1 items-center text-black font-medium">

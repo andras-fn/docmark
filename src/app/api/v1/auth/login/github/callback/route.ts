@@ -7,7 +7,7 @@ import { userTable } from "@/db/schemas/auth";
 import { eq } from "drizzle-orm";
 
 export async function GET(request: Request): Promise<Response> {
-  console.log("in the callback");
+  //console.log("in the callback");
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
@@ -18,7 +18,7 @@ export async function GET(request: Request): Promise<Response> {
     });
   }
 
-  console.log("about to try");
+  //console.log("about to try");
 
   try {
     const tokens = await github.validateAuthorizationCode(code);
@@ -35,7 +35,7 @@ export async function GET(request: Request): Promise<Response> {
       .from(userTable)
       .where(eq(userTable.id, githubUser.id));
 
-    console.log(existingUser);
+    //console.log(existingUser);
 
     if (existingUser.length > 0) {
       const session = await lucia.createSession(existingUser[0].id, {});
@@ -63,7 +63,7 @@ export async function GET(request: Request): Promise<Response> {
       username: githubUser.login,
     };
 
-    console.log(dbPayload);
+    //console.log(dbPayload);
 
     await db.insert(userTable).values(dbPayload);
 

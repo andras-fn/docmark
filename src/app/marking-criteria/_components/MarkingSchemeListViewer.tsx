@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CompactPagination from "@/components/CompactPagination";
+import { ExtendedMarkingScheme } from "@/db/schemas/markingScheme";
 
 const MarkingSchemeListViewer = ({
   selectedMarkingScheme,
   setSelectedMarkingScheme,
+}: {
+  selectedMarkingScheme: ExtendedMarkingScheme | null;
+  setSelectedMarkingScheme: React.Dispatch<
+    React.SetStateAction<ExtendedMarkingScheme | null>
+  >;
 }) => {
-  const [markingScheme, setMarkingScheme] = useState([]);
+  const [markingScheme, setMarkingScheme] = useState<ExtendedMarkingScheme[]>(
+    []
+  );
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +54,7 @@ const MarkingSchemeListViewer = ({
     fetchData();
   }, [currentPage]);
 
-  const markingSchemeClickHandler = (scheme) => {
+  const markingSchemeClickHandler = (scheme: ExtendedMarkingScheme) => {
     //console.log(scheme);
     setSelectedMarkingScheme(scheme);
   };

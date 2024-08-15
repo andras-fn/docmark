@@ -65,7 +65,7 @@ const DocumentGroupsListViewer = ({
   return (
     <div className="w-full min-h-full h-full max-h-full">
       <div className="flex justify-between w-full p-2 font-medium border-b border-slate-500">
-        <h4 className="">Document Groups</h4> <p>{documentGroups.length}</p>
+        <h4 className="">Document Groups</h4> <p>{documentGroups?.length}</p>
       </div>
       <ScrollArea className="max-h-[calc(100%-41px)] min-h-[calc(100%-41px)] h-[calc(100%-41px)]">
         {loading ? ( // Render loading state if isLoading is true

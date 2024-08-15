@@ -9,6 +9,10 @@ const TablePagination = () => {
   const currentPage = 1;
 
   const numberOfPages = 10;
+
+  const enterKeyHandler = () => {
+    return;
+  };
   return (
     <div className="flex items-center gap-x-1 justify-center p-2">
       <button>
@@ -27,7 +31,7 @@ const TablePagination = () => {
         onKeyDown={(e) => {
           if (e.key === "Enter") enterKeyHandler();
         }}
-        disabled={numberOfPages === 0}
+        disabled={false}
       />
       <p> of {numberOfPages.toFixed()}</p>
       <button>

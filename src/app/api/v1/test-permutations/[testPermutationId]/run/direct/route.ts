@@ -14,7 +14,7 @@ import { document } from "@/db/schemas/document";
 import OpenAI from "openai";
 import { systemMessage } from "@/lib/systemMessage";
 
-import { reduceResults } from "@/app/api/v1/marking-schemes/route";
+import { reduceMarkingSchemeResults } from "@/lib/reduceMarkingSchemeResults";
 
 import { markingScheme } from "@/db/schemas/markingScheme";
 import { testCriteria } from "@/db/schemas/testCriteria";
@@ -94,7 +94,9 @@ export async function POST(
 
     //console.log(JSON.stringify(markingSchemeResult, null, 2));
 
-    const reducedMarkingSchemeResult = await reduceResults(markingSchemeResult);
+    const reducedMarkingSchemeResult = await reduceMarkingSchemeResults(
+      markingSchemeResult
+    );
 
     // generate text
     const text: string = `${JSON.stringify(
@@ -113,11 +115,7 @@ export async function POST(
     const apiKey = process.env["AZURE_OPENAI_API_KEY"];
 
     if (!apiKey) {
-      return {
-        success: false,
-        error:
-          "The AZURE_OPENAI_API_KEY environment variable is missing or empty.",
-      };
+      throw new Error("Azure OpenAI API Key not found");
     }
 
     const baseURL = `https://${resource}.openai.azure.com/openai/deployments/${model}`;

@@ -11,7 +11,7 @@ type ExtendedMarkingScheme = MarkingScheme & {
 const MarkingSchemeViewer = ({
   selectedMarkingScheme,
 }: {
-  selectedMarkingScheme: ExtendedMarkingScheme;
+  selectedMarkingScheme: ExtendedMarkingScheme | null;
 }) => {
   return (
     <div className="h-full w-full">

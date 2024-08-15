@@ -1,4 +1,8 @@
-export function filterEvaluation(documents, documentId, filter) {
+export function filterEvaluation(
+  documents: any[],
+  documentId: string,
+  filter: string
+) {
   // loop over documents
   const filteredDocument = documents.find((document) => {
     // loop over results
@@ -11,7 +15,7 @@ export function filterEvaluation(documents, documentId, filter) {
     return filteredDocument.results.length;
   }
 
-  const filteredResults = filteredDocument.results.filter((result) => {
+  const filteredResults = filteredDocument.results.filter((result: any) => {
     if (result.evaluation === filter) {
       return true;
     }

@@ -20,8 +20,8 @@ const DocumentsListViewer = ({
   selectedMarkingScheme: any;
 }) => {
   const [documentsLoading, setDocumentsLoading] = useState(true);
-  const [error, setError] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const [error, setError] = useState<boolean>();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   useEffect(() => {
     //console.log("documents use effect");
@@ -40,8 +40,8 @@ const DocumentsListViewer = ({
         setDocumentsLoading(false);
       } catch (error) {
         console.error(error);
-        setError(true);
-        setErrorMessage(error.message);
+        setError(false);
+        setErrorMessage(error as string);
         setDocumentsLoading(false);
       }
     };
@@ -49,7 +49,7 @@ const DocumentsListViewer = ({
     fetchData();
   }, [selectedDocumentGroup, selectedMarkingScheme]);
 
-  const documentClickHandler = (document) => {
+  const documentClickHandler = (document: any): void => {
     //console.log(document);
     setSelectedDocument(document);
   };
@@ -71,14 +71,16 @@ const DocumentsListViewer = ({
               className="border border-black rounded p-1 w-full"
               placeholder="Filter..."
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setFilter(e.target.value)
+              }
             />
           </div>
 
           <ScrollArea className="max-h-[calc(100%-51px-41px)] min-h-[calc(100%-51px-41px)] h-[calc(100%-51px-41px)]">
             {documents &&
               documents
-                .filter((document) => {
+                .filter((document: any) => {
                   if (filter === "") {
                     return true;
                   } else {
@@ -87,7 +89,7 @@ const DocumentsListViewer = ({
                       .includes(filter.toLowerCase());
                   }
                 })
-                .map((document) => (
+                .map((document: any) => (
                   <div
                     key={document.documentId}
                     className={`m-2 border rounded border-slate-500 hover:outline-none hover:ring-2 hover:ring-slate-700 hover:border-transparent ${
@@ -99,7 +101,9 @@ const DocumentsListViewer = ({
                   >
                     <button
                       className="text-left text-sm w-full"
-                      onClick={(e) => documentClickHandler(document)}
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                        documentClickHandler(document)
+                      }
                     >
                       <div className="flex flex-col p-2">
                         <div className="text-sm  font-bold">

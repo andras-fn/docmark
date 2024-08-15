@@ -1,8 +1,9 @@
 import { relations } from "drizzle-orm";
-import { text, pgSchema, uuid, timestamp, jsonb } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { text, pgSchema, uuid, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
 
 import { testCriteria } from "./testCriteria";
+import type { TestCriteria } from "@/db/schemas/testCriteria";
 
 export const docmarkaiSchema = pgSchema("docmarkai_schema");
 
@@ -20,6 +21,9 @@ export type MarkingSchemeWithCounts = MarkingScheme & {
   totalNumber: number;
   passNumber: number;
   failNumber: number;
+};
+export type ExtendedMarkingScheme = MarkingScheme & {
+  testCriteria: TestCriteria[];
 };
 export const markingSchemeRelations = relations(markingScheme, ({ many }) => ({
   testCriteria: many(testCriteria),

@@ -4,12 +4,12 @@ import MarkingSchemeViewer from "./MarkingSchemeViewer";
 
 import { useEffect, useState } from "react";
 
-const Viewer = ({ markingRunId }) => {
-  const [data, setData] = useState();
+const Viewer = ({ markingRunId }: { markingRunId: string }) => {
+  const [data, setData] = useState<{ name: string } | undefined>();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [error, setError] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const [error, setError] = useState<boolean>();
+  const [errorMessage, setErrorMessage] = useState<string>();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,8 +22,8 @@ const Viewer = ({ markingRunId }) => {
         setIsLoading(false);
       } catch (error) {
         // Handle error here
-        setError(error);
-        setErrorMessage(error.message);
+        setError(true);
+        setErrorMessage(error as string);
       }
     };
 
@@ -42,10 +42,7 @@ const Viewer = ({ markingRunId }) => {
         ) : (
           <>
             {/* <Banner data={data} /> */}
-            <MarkingSchemeViewer
-              markingRunData={data}
-              markingRunId={markingRunId}
-            />
+            <MarkingSchemeViewer markingRunId={markingRunId} />
           </>
         )}
       </div>

@@ -10,13 +10,7 @@ import {
 } from "@/db/schemas/documentGroup";
 import { MarkingSchemeWithCounts } from "@/db/schemas/markingScheme";
 
-const MarkingSchemeViewer = ({
-  markingRunData,
-  markingRunId,
-}: {
-  markingRunData: any;
-  markingRunId: string;
-}) => {
+const MarkingSchemeViewer = ({ markingRunId }: { markingRunId: string }) => {
   //console.log(markingRunData);
   // marking run state
   const [markingRunResults, setMarkingRunResults] = useState();
@@ -28,14 +22,18 @@ const MarkingSchemeViewer = ({
   const [errorMessage, setErrorMessage] = useState<string>();
 
   // document group state
-  const [documentGroups, setDocumentGroups] = useState([]);
+  const [documentGroups, setDocumentGroups] = useState<
+    DocumentGroupWithCounts[]
+  >([]);
   const [selectedDocumentGroup, setSelectedDocumentGroup] =
-    useState<DocumentGroupWithCounts | null>();
+    useState<DocumentGroupWithCounts | null>(null);
 
   // marking scheme state
-  const [markingSchemes, setMarkingSchemes] = useState([]);
+  const [markingSchemes, setMarkingSchemes] = useState<
+    MarkingSchemeWithCounts[]
+  >([]);
   const [selectedMarkingScheme, setSelectedMarkingScheme] =
-    useState<MarkingSchemeWithCounts | null>();
+    useState<MarkingSchemeWithCounts | null>(null);
 
   // dopcuments state
   const [documents, setDocuments] = useState([]);
@@ -73,12 +71,8 @@ const MarkingSchemeViewer = ({
             <DocumentGroupsListViewer
               markingRunId={markingRunId}
               documentGroups={documentGroups}
-              setDocumentGroups={
-                setDocumentGroups as React.Dispatch<
-                  React.SetStateAction<DocumentGroup[]>
-                >
-              }
-              selectedDocumentGroup={selectedDocumentGroup as DocumentGroup}
+              setDocumentGroups={setDocumentGroups}
+              selectedDocumentGroup={selectedDocumentGroup}
               setSelectedDocumentGroup={setSelectedDocumentGroup}
             />
           </div>
