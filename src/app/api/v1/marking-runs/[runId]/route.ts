@@ -1,4 +1,4 @@
-import { eq, and, count } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/db/client";
 import { markingRun, MarkingRun } from "@/db/schemas/markingRun";
 import { validateRequest } from "@/auth/auth";

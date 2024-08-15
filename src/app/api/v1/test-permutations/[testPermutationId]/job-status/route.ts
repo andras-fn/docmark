@@ -4,14 +4,18 @@ import {
   MarkingRunPermutations,
 } from "@/db/schemas/markingRunPermutations";
 import { getAssoToken } from "@/lib/getAssoToken";
-import { eq, and, count } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getPlatformServiceJobStatus } from "@/lib/getPlatformServiceJobStatus";
 
 import { validateRequest } from "@/auth/auth";
 
 export async function GET(
   request: Request,
-  { params }: { params: { testPermutationId: string } }
+  {
+    params,
+  }: {
+    params: { testPermutationId: string };
+  }
 ) {
   const { user } = await validateRequest();
   if (!user) {
@@ -22,11 +26,11 @@ export async function GET(
   }
 
   try {
-    console.log("GET /api/v1/test-permutations/[testPermutationId]/job-status");
+    //console.log("GET /api/v1/test-permutations/[testPermutationId]/job-status");
     // get the test permutation id from the url
     const testPermutationId = params.testPermutationId;
 
-    console.log("Fetching Test Permutation details");
+    //console.log("Fetching Test Permutation details");
     // get the job id for the test permutation
     const [testPermutation]: MarkingRunPermutations[] = (await db
       .select()
@@ -35,7 +39,7 @@ export async function GET(
         eq(markingRunPermutations.id, testPermutationId)
       )) as MarkingRunPermutations[];
 
-    console.log(testPermutation);
+    //console.log(testPermutation);
 
     if (!testPermutation) {
       return Response.json(
@@ -44,7 +48,7 @@ export async function GET(
       );
     }
 
-    console.log("Generating authentication token");
+    //console.log("Generating authentication token");
     // generate asso token
     const tokenResponse = await getAssoToken(
       process.env.ASSO_CLIENT_ID || "",
@@ -64,7 +68,7 @@ export async function GET(
       );
     }
 
-    console.log("Fetching job status");
+    //console.log("Fetching job status");
     // get the job status
     const jobStatus = await getPlatformServiceJobStatus(
       tokenResponse.data.access_token,
@@ -72,11 +76,11 @@ export async function GET(
       process.env.AI_PLATFORM_SERVICE_URL_GET_JOB_STATUS || ""
     );
 
-    console.log(
-      `Job Status: ${JSON.stringify(jobStatus.data.status, null, 2)}`
-    );
+    // console.log(
+    //   `Job Status: ${JSON.stringify(jobStatus.data.status, null, 2)}`
+    // );
 
-    console.log("Returning job status");
+    // console.log("Returning job status");
     // return the job status
     return Response.json({ status: 200, data: jobStatus.data });
   } catch (error) {

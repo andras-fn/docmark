@@ -10,7 +10,11 @@ import { validateRequest } from "@/auth/auth";
 
 export async function GET(
   request: Request,
-  { params }: { params: { runId: string } }
+  {
+    params,
+  }: {
+    params: { runId: string };
+  }
 ) {
   const { user } = await validateRequest();
   if (!user) {
@@ -22,16 +26,20 @@ export async function GET(
   try {
     const markingRunId = params.runId;
 
-    const [documentGroupIds]: MarkingRun[] = await db
+    type DocumentGroupResults = {
+      documentGroups: string[] | null;
+    };
+
+    const [documentGroupIds]: DocumentGroupResults[] = (await db
       .select({ documentGroups: markingRun.documentGroups })
       .from(markingRun)
-      .where(eq(markingRun.id, markingRunId));
+      .where(eq(markingRun.id, markingRunId))) as DocumentGroupResults[];
 
-    //console.log(documentGroupIds);
-
-    if (!documentGroupIds) {
+    if (!documentGroupIds || documentGroupIds.documentGroups === null) {
       throw new Error("No document groups found for this marking run");
     }
+
+    //console.log(documentGroupIds);
 
     const documentGroups: {
       document_groups: DocumentGroup;

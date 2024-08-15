@@ -18,7 +18,8 @@ const AddDocumentGroupButtonModal = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const saveButtonClickHandler = async () => {
-    const inputValue = document.getElementById("name")?.value;
+    const inputValue = (document.getElementById("name") as HTMLInputElement)
+      ?.value;
     if (inputValue) {
       try {
         const response = await fetch("/api/v1/document-groups", {

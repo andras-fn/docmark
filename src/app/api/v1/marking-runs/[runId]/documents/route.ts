@@ -1,10 +1,7 @@
-import { eq, inArray, and } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { db } from "@/db/client";
-import {
-  markingRunResults,
-  MarkingRunResults,
-} from "@/db/schemas/markingRunResults";
-import { document, Document } from "@/db/schemas/document";
+import { markingRunResults } from "@/db/schemas/markingRunResults";
+import { document } from "@/db/schemas/document";
 import { validateRequest } from "@/auth/auth";
 
 export async function GET(
@@ -62,10 +59,18 @@ export async function GET(
 
     //console.log(rawResults);
 
+    interface ExistingDocument {
+      documentId: string;
+      documentName: string | null;
+      results: any[]; // Update the type of results to match the actual type
+    }
+
     const documentResults = rawResults.reduce((acc, row) => {
       const { documentId, documentName, ...result } = row;
 
-      let existingDocument = acc.find((doc) => doc.documentId === documentId);
+      let existingDocument = acc.find(
+        (doc) => doc.documentId === documentId
+      ) as ExistingDocument | undefined;
 
       if (!existingDocument) {
         existingDocument = {
@@ -79,7 +84,7 @@ export async function GET(
       existingDocument.results.push(result.results);
 
       return acc;
-    }, []);
+    }, [] as ExistingDocument[]);
 
     if (!documentResults) {
       throw new Error("No documents found for this marking run");

@@ -30,7 +30,9 @@ const AddDocumentButtonModal = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [documentGroups, setDocumentGroups] = useState([]);
+  const [documentGroups, setDocumentGroups] = useState<
+    { id: string; name: string }[]
+  >([]);
 
   const [documentName, setDocumentName] = useState("");
   const [selectedDocumentGroup, setSelectedDocumentGroup] = useState("");

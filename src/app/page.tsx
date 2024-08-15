@@ -19,7 +19,7 @@ export default async function Home() {
         </div>
       ) : (
         <div className="p-2">
-          Please sign in. You shouldn't have been able to get to this page
+          Please sign in. You shouldn&apos;t have been able to get to this page
           without signing in...
         </div>
       )}

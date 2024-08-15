@@ -11,61 +11,9 @@ import {
   insertTestCriteriaSchema,
   type TestCriteria,
 } from "@/db/schemas/testCriteria";
-
-import { validateRequest } from "@/auth/auth";
-
-interface MarkingSchemeWithCriteria extends MarkingScheme {
-  testCriteria: TestCriteria[];
-}
-
-// GET - get all documents
-
-export function reduceResults(
-  results: {
-    markingScheme: MarkingScheme | null;
-
-    testCriteria?:
-      | {
-          testCriteriaId: string;
-          testDescription: string;
-          category: string;
-        }
-      | null
-      | undefined;
-  }[]
-): Promise<MarkingSchemeWithCriteria[]> {
-  const result: MarkingSchemeWithCriteria[] = results.reduce(
-    (acc: MarkingSchemeWithCriteria[], item) => {
-      const { markingScheme, testCriteria } = item;
-      const existingScheme = acc.find(
-        (scheme: MarkingSchemeWithCriteria) => scheme.id === markingScheme?.id
-      );
-
-      if (existingScheme && testCriteria) {
-        existingScheme.testCriteria.push(testCriteria);
-      } else if (testCriteria) {
-        acc.push({
-          ...(markingScheme as MarkingScheme),
-          testCriteria: [testCriteria],
-        });
-      }
-
-      return acc;
-    },
-    []
-  );
-
-  return Promise.resolve(result);
-}
+import { reduceMarkingSchemeResults } from "@/lib/reduceMarkingSchemeResults";
 
 export async function GET(request: Request) {
-  const { user } = await validateRequest();
-  if (!user) {
-    return Response.json(
-      { status: 401, issues: "Unauthorized" },
-      { status: 401 }
-    );
-  }
   try {
     // get the url params
     const url = new URL(request.url);
@@ -91,19 +39,6 @@ export async function GET(request: Request) {
     // validate the search parameter
     const term = searchSchema.parse(search);
 
-    // const query = db.query.markingScheme.findMany({
-    //   limit:
-    //     validatedOffsetAndLimit.limit > 0 ? validatedOffsetAndLimit.limit : 20,
-    //   offset: validatedOffsetAndLimit.offset,
-    //   orderBy: [asc(markingScheme.createdAt)],
-    //   where: term
-    //     ? (markingScheme, { ilike }) => ilike(markingScheme.name, `%${term}%`)
-    //     : undefined,
-    //   with: {
-    //     testCriteria: true,
-    //   },
-    // });
-
     const query = db
       .select({
         markingScheme: markingScheme,
@@ -123,10 +58,10 @@ export async function GET(request: Request) {
     if (term) {
       query.where(ilike(markingScheme.name, `%${term}%`));
     }
-    console.log("ttt");
+    //console.log("ttt");
 
     const queryResults = await query;
-    console.log(queryResults);
+    //console.log(queryResults);
 
     const countQuery = db
       .select({ count: count() })
@@ -135,7 +70,25 @@ export async function GET(request: Request) {
 
     const [results, totalResultCount] = await Promise.all([query, countQuery]);
 
-    const result: MarkingScheme[] = await reduceResults(queryResults);
+    const result: MarkingScheme[] = await reduceMarkingSchemeResults(
+      queryResults.map((item) => {
+        return {
+          markingScheme: {
+            id: item.markingScheme.id,
+            name: item.markingScheme.name,
+            createdAt: item.markingScheme.createdAt,
+            updatedAt: item.markingScheme.updatedAt,
+          },
+          testCriteria: item.testCriteria
+            ? {
+                testDescription: item.testCriteria.testDescription,
+                category: item.testCriteria.category,
+                testCriteriaId: item.testCriteria.id,
+              }
+            : null,
+        };
+      })
+    );
 
     console.log(result);
 
@@ -161,13 +114,6 @@ export async function GET(request: Request) {
 
 // POST - create a document
 export async function POST(request: Request) {
-  const { user } = await validateRequest();
-  if (!user) {
-    return Response.json(
-      { status: 401, issues: "Unauthorized" },
-      { status: 401 }
-    );
-  }
   try {
     const requestBody = await request.json();
 

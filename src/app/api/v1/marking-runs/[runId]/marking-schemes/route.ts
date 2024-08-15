@@ -1,16 +1,17 @@
 import { eq, inArray, and } from "drizzle-orm";
 import { db } from "@/db/client";
-import { markingRun, MarkingRun } from "@/db/schemas/markingRun";
-import { markingScheme, MarkingScheme } from "@/db/schemas/markingScheme";
-import {
-  markingRunResults,
-  MarkingRunResults,
-} from "@/db/schemas/markingRunResults";
+import { markingRun } from "@/db/schemas/markingRun";
+import { markingScheme } from "@/db/schemas/markingScheme";
+import { markingRunResults } from "@/db/schemas/markingRunResults";
 import { validateRequest } from "@/auth/auth";
 
 export async function GET(
   request: Request,
-  { params }: { params: { runId: string } }
+  {
+    params,
+  }: {
+    params: { runId: string };
+  }
 ) {
   try {
     const { user } = await validateRequest();
@@ -22,14 +23,18 @@ export async function GET(
     }
     const markingRunId = params.runId;
 
-    const [markingSchemeIds]: { markingSchemes: unknown }[] = await db
+    type MarkingSchemeResults = {
+      markingSchemes: string[] | null;
+    };
+
+    const [markingSchemeIds]: MarkingSchemeResults[] = (await db
       .select({ markingSchemes: markingRun.markingSchemes })
       .from(markingRun)
-      .where(eq(markingRun.id, markingRunId));
+      .where(eq(markingRun.id, markingRunId))) as MarkingSchemeResults[];
 
     //console.log(markingSchemeIds);
 
-    if (!markingSchemeIds) {
+    if (!markingSchemeIds || markingSchemeIds.markingSchemes === null) {
       throw new Error("No marking schemes found for this marking run");
     }
 

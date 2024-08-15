@@ -1,17 +1,11 @@
-import { eq, and, count } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
-import {
-  markingRunPermutations,
-  MarkingRunPermutations,
-} from "@/db/schemas/markingRunPermutations";
+import { markingRunPermutations } from "@/db/schemas/markingRunPermutations";
 
 import { validateRequest } from "@/auth/auth";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { testPermutationId: string } }
-) {
+export async function GET(request: Request) {
   const { user } = await validateRequest();
   if (!user) {
     return Response.json(

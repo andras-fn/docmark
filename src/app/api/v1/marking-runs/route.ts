@@ -1,9 +1,6 @@
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { markingRun, insertMarkingRunSchema } from "@/db/schemas/markingRun";
-import {
-  markingRunPermutations,
-  MarkingRunPermutations,
-} from "@/db/schemas/markingRunPermutations";
+import { markingRunPermutations } from "@/db/schemas/markingRunPermutations";
 import { db } from "@/db/client";
 import { count, eq, ilike, desc } from "drizzle-orm";
 import { z } from "zod";
@@ -90,7 +87,7 @@ export async function GET(request: Request) {
         .where(term ? ilike(markingRun.name, `%${term}%`) : undefined),
     ]);
 
-    console.log(rawResults);
+    //console.log(rawResults);
 
     const transformedResults: TransformedResult[] = rawResults.reduce<
       TransformedResult[]
@@ -157,7 +154,7 @@ export async function POST(request: Request) {
   try {
     const requestBody = await request.json();
 
-    console.log(JSON.stringify(requestBody, null, 2));
+    //console.log(JSON.stringify(requestBody, null, 2));
 
     // validate inbound data
     if (!requestBody) {
@@ -183,9 +180,9 @@ export async function POST(request: Request) {
       .values(requestBody)
       .returning({ id: markingRun.id });
 
-    console.log(JSON.stringify({ markingRunId: insertResult.id }));
+    //console.log(JSON.stringify({ markingRunId: insertResult.id }));
 
-    if (process.env.ENVIRONMENT === "test") {
+    if (process.env.ENVIRONMENT !== "test") {
       // send message to sqs
       const data = await sqsClient.send(
         new SendMessageCommand({
@@ -194,7 +191,7 @@ export async function POST(request: Request) {
         })
       );
 
-      console.log("Success, message sent. MessageID:", data.MessageId);
+      //console.log("Success, message sent. MessageID:", data.MessageId);
     }
 
     return Response.json(

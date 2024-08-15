@@ -7,8 +7,10 @@ const DocumentGroupsListViewer = ({
   selectedDocumentGroup,
   setSelectedDocumentGroup,
 }: {
-  selectedDocumentGroup: DocumentGroup;
-  setSelectedDocumentGroup: React.Dispatch<React.SetStateAction<DocumentGroup>>;
+  selectedDocumentGroup: DocumentGroup | null;
+  setSelectedDocumentGroup: React.Dispatch<
+    React.SetStateAction<DocumentGroup | null>
+  >;
 }) => {
   const [documentGroups, setDocumentGroups] = useState<DocumentGroup[]>([]);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);

@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { OAuth2RequestError } from "arctic";
 import { generateIdFromEntropySize } from "lucia";
 import { db } from "@/db/client";
-import { userTable, sessionTable } from "@/db/schemas/auth";
+import { userTable } from "@/db/schemas/auth";
 import { eq } from "drizzle-orm";
 
 export async function GET(request: Request): Promise<Response> {
@@ -38,8 +38,7 @@ export async function GET(request: Request): Promise<Response> {
     console.log(existingUser);
 
     if (existingUser.length > 0) {
-      console.log("existing user");
-      const session = await lucia.createSession(existingUser.id, {});
+      const session = await lucia.createSession(existingUser[0].id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
       cookies().set(
         sessionCookie.name,

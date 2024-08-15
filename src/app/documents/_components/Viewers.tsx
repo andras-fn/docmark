@@ -4,13 +4,17 @@ import DocumentGroupsListViewer from "./DocumentGroupsListViewer";
 import DocumentsListViewer from "./DocumentsListViewer";
 import DocumentViewer from "./DocumentViewer";
 import type { DocumentGroup } from "@/db/schemas/documentGroup";
+import type { Document } from "@/db/schemas/document";
 
 import { useState } from "react";
 
 const Viewers = () => {
   const [selectedDocumentGroup, setSelectedDocumentGroup] =
-    useState<DocumentGroup | null>(null);
-  const [selectedDocument, setSelectedDocument] = useState(null);
+    useState<DocumentGroup | null>(null as DocumentGroup | null);
+
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
+    null
+  );
 
   return (
     <div className="flex w-full divide-x divide-slate-500 min-h-[calc(100%-56px)] max-h-[calc(100%-56px)]">

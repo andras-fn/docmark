@@ -6,10 +6,9 @@ import {
 } from "@/db/schemas/markingRunPermutations";
 import {
   markingRunResults,
-  MarkingRunResults,
   InsertMarkingRunResults,
 } from "@/db/schemas/markingRunResults";
-import { eq, and, count } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { document } from "@/db/schemas/document";
 
 import OpenAI from "openai";
@@ -24,7 +23,11 @@ import { validateRequest } from "@/auth/auth";
 
 export async function POST(
   request: Request,
-  { params }: { params: { testPermutationId: string } }
+  {
+    params,
+  }: {
+    params: { testPermutationId: string };
+  }
 ) {
   const { user } = await validateRequest();
   if (!user) {
@@ -94,7 +97,7 @@ export async function POST(
     const reducedMarkingSchemeResult = await reduceResults(markingSchemeResult);
 
     // generate text
-    const text = `${JSON.stringify(
+    const text: string = `${JSON.stringify(
       {
         document: [documentResult],
         markingCriteria: [reducedMarkingSchemeResult],
@@ -105,7 +108,7 @@ export async function POST(
 
     // ping openai direct
     const resource = process.env.AZURE_OPENAI_RESOURCE;
-    const model = process.env.AZURE_OPENAI_MODEL;
+    const model = process.env.AZURE_OPENAI_MODEL || "gpt-4o";
     const apiVersion = "2023-03-15-preview";
     const apiKey = process.env["AZURE_OPENAI_API_KEY"];
 
@@ -132,7 +135,10 @@ export async function POST(
       response_format: { type: "json_object" },
       temperature: 0,
       messages: [
-        systemMessage,
+        {
+          role: "system",
+          content: systemMessage.content,
+        },
         {
           role: "user",
           content: text,
@@ -175,7 +181,7 @@ export async function POST(
     //console.log(markingResults);
 
     // update database with the jobId
-    console.log("Updating markingRunPermutations");
+    //console.log("Updating markingRunPermutations");
     const markingRunPermutationsUpdate = db
       .update(markingRunPermutations)
       .set({
@@ -189,7 +195,7 @@ export async function POST(
       })
       .where(eq(markingRunPermutations.id, testPermutationId));
 
-    console.log("Updating markingRunResults");
+    //console.log("Updating markingRunResults");
     const markingRunResultsUpdate = db
       .insert(markingRunResults)
       .values(markingResults)
@@ -207,7 +213,10 @@ export async function POST(
     return Response.json(
       {
         status: 200,
-        data: markingRunResultsUpdateResult,
+        data: {
+          markingRunResultsUpdateResult,
+          markingRunPermutationsUpdateResult,
+        },
       },
       { status: 200 }
     );

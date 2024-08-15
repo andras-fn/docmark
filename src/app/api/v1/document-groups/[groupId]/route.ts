@@ -1,10 +1,6 @@
 import { db } from "@/db/client";
 import { eq } from "drizzle-orm";
-import { z } from "zod";
-import {
-  documentGroup,
-  insertDocumentGroupSchema,
-} from "@/db/schemas/documentGroup";
+import { documentGroup } from "@/db/schemas/documentGroup";
 import { validateRequest } from "@/auth/auth";
 
 export async function GET(request: Request, { params }: { params: any }) {

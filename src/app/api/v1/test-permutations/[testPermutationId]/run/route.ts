@@ -6,14 +6,19 @@ import {
 } from "@/db/schemas/markingRunPermutations";
 import { getAssoToken } from "@/lib/getAssoToken";
 import { createPlatformServiceJob } from "@/lib/createPlatformServiceJob";
-import { eq, and, count } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { document } from "@/db/schemas/document";
-
+import { markingScheme } from "@/db/schemas/markingScheme";
+import { testCriteria } from "@/db/schemas/testCriteria";
 import { validateRequest } from "@/auth/auth";
 
 export async function POST(
   request: Request,
-  { params }: { params: { testPermutationId: string } }
+  {
+    params,
+  }: {
+    params: { testPermutationId: string };
+  }
 ) {
   const { user } = await validateRequest();
   if (!user) {
@@ -23,11 +28,10 @@ export async function POST(
     );
   }
   try {
-    // get the test permutation id from the url
+    //console.log(params);
     const testPermutationId = params.testPermutationId;
-    console.log(testPermutationId);
+    //console.log(testPermutationId);
 
-    // check if the test permutation id is a valid UUID
     if (!isValidUUID(testPermutationId)) {
       console.error("Invalid UUID: ", testPermutationId);
       return Response.json(
@@ -36,7 +40,6 @@ export async function POST(
       );
     }
 
-    // get the test permutation from the database
     const [testPermutation]: MarkingRunPermutations[] = (await db
       .select()
       .from(markingRunPermutations)
@@ -44,9 +47,8 @@ export async function POST(
         eq(markingRunPermutations.id, testPermutationId)
       )) as unknown as MarkingRunPermutations[];
 
-    console.log(testPermutation);
+    //console.log(testPermutation);
 
-    // fetch document and marking scheme from database
     const documentQuery = db
       .select({
         documentId: document.id,
@@ -57,29 +59,50 @@ export async function POST(
       .from(document)
       .where(eq(document.id, testPermutation.documentId));
 
-    const markingSchemeQuery = db.query.markingScheme.findMany({
-      where: (markingScheme, { eq }) =>
-        eq(markingScheme.id, testPermutation.markingSchemeId),
-      with: {
-        testCriteria: true,
-      },
-    });
+    const markingSchemeQuery = db
+      .select({
+        markingSchemeId: markingScheme.id,
+        markingSchemeName: markingScheme.name,
+        testCriteriaId: testCriteria.id,
+        testCriteriaDescription: testCriteria.testDescription,
+        testCriteriaCategory: testCriteria.category,
+      })
+      .from(markingScheme)
+      .leftJoin(
+        testCriteria,
+        eq(markingScheme.id, testCriteria.markingSchemeId)
+      )
+      .where(eq(markingScheme.id, testPermutation.markingSchemeId));
 
     const [documentResult, markingSchemeResult] = await Promise.all([
       documentQuery,
       markingSchemeQuery,
     ]);
 
-    console.log(`Document: ${JSON.stringify(documentResult, null, 2)}`);
-    console.log(
-      `Marking Scheme: ${JSON.stringify(markingSchemeResult, null, 2)}`
-    );
+    const markingSchemeReducedResult: { [key: string]: any } =
+      markingSchemeResult.reduce((acc: { [key: string]: any }, row) => {
+        const markingSchemeId = row.markingSchemeId;
+        if (!acc[markingSchemeId]) {
+          acc[markingSchemeId] = {
+            id: markingSchemeId,
+            name: row.markingSchemeName,
+            testCriteria: [],
+          };
+        }
+        if (row.testCriteriaId) {
+          acc[markingSchemeId].testCriteria.push({
+            id: row.testCriteriaId,
+            description: row.testCriteriaDescription,
+            category: row.testCriteriaCategory,
+          });
+        }
+        return acc;
+      }, {});
 
-    // generate text
     const text = `${JSON.stringify(
       {
         document: [documentResult],
-        markingCriteria: [markingSchemeResult],
+        markingCriteria: [markingSchemeReducedResult],
       },
       null,
       2
@@ -87,7 +110,6 @@ export async function POST(
 
     console.log(`Text: ${text}`);
 
-    // generate asso token
     const tokenResponse = await getAssoToken(
       process.env.ASSO_CLIENT_ID || "",
       process.env.ASSO_CLIENT_SECRET || "",
@@ -96,7 +118,6 @@ export async function POST(
 
     console.log(`Asso Token: ${JSON.stringify(tokenResponse, null, 2)}`);
 
-    // check the asso token result
     if (
       !tokenResponse.success ||
       tokenResponse.data.access_token === undefined
@@ -106,7 +127,6 @@ export async function POST(
       );
     }
 
-    // generate the metadata for the platform request
     const platformServiceMetadata = [
       { key: "markingRunId", value: testPermutation.markingRunId },
       {
@@ -125,7 +145,6 @@ export async function POST(
       )}`
     );
 
-    // send request to platform service
     const jobResponse = await createPlatformServiceJob(
       tokenResponse.data.access_token,
       text,
@@ -136,14 +155,12 @@ export async function POST(
 
     console.log(`Job ID: ${JSON.stringify(jobResponse, null, 2)}`);
 
-    // check the result of the platform service request
     if (!jobResponse.data || !jobResponse.data.hasOwnProperty("jobId")) {
       const error = `Invalid response from Platform Service: ${jobResponse.error}`;
 
       throw new Error(`${testPermutationId} | Error creating job: ${error}`);
     }
 
-    // update database with the jobId
     await db
       .update(markingRunPermutations)
       .set({
@@ -167,6 +184,7 @@ export async function POST(
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return Response.json({ status: 500, issues: error }, { status: 500 });
   }
 }

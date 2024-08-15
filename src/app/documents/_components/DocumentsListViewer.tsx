@@ -3,10 +3,16 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import CompactPagination from "@/components/CompactPagination";
 import type { Document } from "@/db/schemas/document";
 
+import type { DocumentGroup } from "@/db/schemas/documentGroup";
+
 const DocumentsListViewer = ({
   selectedDocumentGroup,
   selectedDocument,
   setSelectedDocument,
+}: {
+  selectedDocumentGroup: DocumentGroup | null;
+  selectedDocument: Document | null;
+  setSelectedDocument: React.Dispatch<React.SetStateAction<Document | null>>;
 }) => {
   const [documents, setDocuments] = useState([]);
   const [numberOfPages, setNumberOfPages] = useState(1);
@@ -21,7 +27,7 @@ const DocumentsListViewer = ({
 
         const response = await fetch(
           `/api/v1/documents?documentGroupId=${
-            selectedDocumentGroup.id
+            selectedDocumentGroup?.id
           }&limit=40&offset=${currentPage > 1 ? currentPage * 40 : 0}`
         );
         const data = await response.json();
