@@ -9,6 +9,7 @@ const DocumentGroupsListViewer = ({
   setDocumentGroups,
   selectedDocumentGroup,
   setSelectedDocumentGroup,
+  setSelectedDocument,
 }: {
   markingRunId: string;
   documentGroups: DocumentGroupWithCounts[];
@@ -19,6 +20,7 @@ const DocumentGroupsListViewer = ({
   setSelectedDocumentGroup: React.Dispatch<
     React.SetStateAction<DocumentGroupWithCounts | null>
   >;
+  setSelectedDocument: React.Dispatch<React.SetStateAction<any | null>>;
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -56,9 +58,11 @@ const DocumentGroupsListViewer = ({
       selectedDocumentGroup &&
       selectedDocumentGroup.id === documentGroup.id
     ) {
+      setSelectedDocument(null);
       setSelectedDocumentGroup(null);
       return;
     }
+    setSelectedDocument(null);
     setSelectedDocumentGroup(documentGroup);
   };
 

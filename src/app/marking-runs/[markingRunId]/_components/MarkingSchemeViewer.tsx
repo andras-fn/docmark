@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
-import TestResultCard from "./TestResultCard";
 import DocumentGroupsListViewer from "./DocumentGroupsListViewer";
 import MarkingSchemeListViewer from "./MarkingSchemeListViewer";
 import ResultsViewer from "./ResultsViewer";
 import DocumentsListViewer from "./DocumentsListViewer";
-import {
-  DocumentGroup,
-  DocumentGroupWithCounts,
-} from "@/db/schemas/documentGroup";
+import { DocumentGroupWithCounts } from "@/db/schemas/documentGroup";
 import { MarkingSchemeWithCounts } from "@/db/schemas/markingScheme";
 
 const MarkingSchemeViewer = ({ markingRunId }: { markingRunId: string }) => {
@@ -74,6 +70,7 @@ const MarkingSchemeViewer = ({ markingRunId }: { markingRunId: string }) => {
               setDocumentGroups={setDocumentGroups}
               selectedDocumentGroup={selectedDocumentGroup}
               setSelectedDocumentGroup={setSelectedDocumentGroup}
+              setSelectedDocument={setSelectedDocument}
             />
           </div>
 
@@ -84,6 +81,7 @@ const MarkingSchemeViewer = ({ markingRunId }: { markingRunId: string }) => {
               setMarkingSchemes={setMarkingSchemes}
               selectedMarkingScheme={selectedMarkingScheme}
               setSelectedMarkingScheme={setSelectedMarkingScheme}
+              setSelectedDocument={setSelectedDocument}
             />
           </div>
 

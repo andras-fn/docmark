@@ -1,20 +1,24 @@
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ShowDocumentPromptsButtonModal from "./ShowDocumentPromptsButtonModal";
 
 const DocumentViewer = ({ selectedDocument }: { selectedDocument: any }) => {
   return (
     <div className="h-full w-full">
       <div className="flex justify-between w-full border-b border-slate-500 items-center">
         {selectedDocument ? (
-          <>
-            <h4 className="p-2 font-medium">
+          <div className="flex items-center justify-between w-full px-2">
+            <h4 className="py-2 font-medium">
               {selectedDocument?.documentName}
             </h4>
             {/* <div className="flex gap-x-2 items-center pr-2">
               <Label htmlFor="prompt-id">Prompt ID:</Label>
               <p id="prompt-id">1234567</p>
             </div> */}
-          </>
+            <ShowDocumentPromptsButtonModal
+              selectedDocument={selectedDocument}
+            />
+          </div>
         ) : (
           <h4 className="p-2 font-medium">No Document Selected</h4>
         )}

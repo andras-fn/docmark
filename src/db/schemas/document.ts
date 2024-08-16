@@ -14,6 +14,8 @@ export const document = docmarkaiSchema.table("documents", {
   documentText: text("document_text").notNull(),
   aiResults: jsonb("ai_results").notNull(),
   documentGroupId: uuid("document_group_id").notNull(),
+  userPrompt: text("user_prompt").notNull(),
+  systemPrompt: text("system_prompt").notNull(),
 });
 
 export const insertDocumentSchema = createInsertSchema(document);

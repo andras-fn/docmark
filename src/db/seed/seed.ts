@@ -34,11 +34,14 @@ import {
   // create documents
   const documentWithDocumentGroupIds = documents.map(
     (document: any, i: number) => {
-      return {
+      const newObject = {
         ...document,
         documentGroupId: documentGroupResults[0].id,
-        documentName: `Patient ${i + 1}`,
+        aiResults: JSON.parse(document.aiResults),
+        userPrompt: document.prompt,
       };
+      delete newObject.prompt;
+      return newObject;
     }
   );
 

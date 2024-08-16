@@ -45,6 +45,8 @@ export async function GET(request: Request) {
         aiResults: document.aiResults,
         createdAt: document.createdAt,
         updatedAt: document.updatedAt,
+        userPrompt: document.userPrompt,
+        systemPrompt: document.systemPrompt,
       })
       .from(document)
       .orderBy(document.createdAt)

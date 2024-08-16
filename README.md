@@ -20,7 +20,29 @@ Next take a copy of the ".env.example", rename the copy to ".env" and then popul
 
  > **Note:** You can find your Github user id easily by going here and entering your Github username: https://caius.github.io/github_id
 ### Set up your database
-The rest of this README assumes that you have already set up a Postgres container with a database called "docmarkai".
+Ensure that you have set up your Postgres Container with a database called "docmarkai". To set up the database with the proper tables you'll want to run the SQL migrate command:
+```bash
+npm run db:migrate
+```
+
+Our ORM comes with a tool to view our database called Drizzle-Studio. To open Drizzle-Studio run:
+```bash
+npm run db:studio
+```
+
+If you make changes to the database schema then you'll need to generate new SQL migrations:
+```bash
+npm run db:generate
+```
+You'll then need to apply them with the migrate command shown earlier:
+```bash
+npm run db:migrate
+```
+To seed the database with some sample data you can run:
+```bash
+npm run db:seed
+```
+ > **Note:** Before you can seed your database with data you'll need to have at least run the DB Migrate command
 
 ### Run the development server
 To run the dev server run:
@@ -71,3 +93,15 @@ To create and run the DocMarkAI container use the following command (assuming th
 docker run --network my-network --env-file .env -p 3000:3000 docmarkai
 ```
 Your DocMarkAI container should now be started, connected to your database and be working.
+### TODO
+ - Add bulk import from S3
+ - Create Github Action to build and deploy container image to registry
+ - Update CDK to deploy container from ECR/Advanced Artefacts
+ - Show prompt ID on the /documents page
+    - Update Docman AI Connector to include the Prompt ID in the metadata sent to the Platform Service
+ - ~~Update readme to include DB scripts~~ - DONE
+ - ~~Add button to /documents page to show the System and User Prompts used in the AI Results~~ - DONE
+ - ~~Add Pass/Fail filter buttons to /marking-runs/:id screen~~ - DONE
+- ~~Clear selected document on /marking-runs/:id screen when Document Group or Marking Scheme changes~~ - DONE
+ - ~~Remove Config button from Navbar~~ - DONE
+ - ~~Rename Marking Criteria to Marking Schemes~~ - DONE

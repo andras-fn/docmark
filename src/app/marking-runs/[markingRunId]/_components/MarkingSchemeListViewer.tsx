@@ -8,6 +8,7 @@ const MarkingSchemeListViewer = ({
   setMarkingSchemes,
   selectedMarkingScheme,
   setSelectedMarkingScheme,
+  setSelectedDocument,
 }: {
   markingRunId: string;
   markingSchemes: any;
@@ -18,6 +19,7 @@ const MarkingSchemeListViewer = ({
   setSelectedMarkingScheme: React.Dispatch<
     React.SetStateAction<MarkingSchemeWithCounts | null>
   >;
+  setSelectedDocument: React.Dispatch<React.SetStateAction<any | null>>;
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<boolean | null>(null);
@@ -52,9 +54,11 @@ const MarkingSchemeListViewer = ({
     //console.log(scheme);
     // if a selectedMarkingScheme is selected then unselect it
     if (selectedMarkingScheme && selectedMarkingScheme.id === scheme.id) {
+      setSelectedDocument(null);
       setSelectedMarkingScheme(null);
       return;
     }
+    setSelectedDocument(null);
     setSelectedMarkingScheme(scheme);
   };
 

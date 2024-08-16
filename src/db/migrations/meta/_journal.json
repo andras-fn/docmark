@@ -15,6 +15,13 @@
       "when": 1723644843871,
       "tag": "0001_lowly_robbie_robertson",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1723809837529,
+      "tag": "0002_superb_celestials",
+      "breakpoints": true
     }
   ]
 }

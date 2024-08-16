@@ -108,7 +108,7 @@ const Navbar = async () => {
             href="/marking-criteria"
             className="p-2 hover:bg-neutral-700 text-lg cursor-pointer flex items-center gap-x-2"
           >
-            <BookOpenCheck /> Marking Criteria
+            <BookOpenCheck /> Marking Schemes
           </Link>
           <Link
             href="/marking-runs"
@@ -118,12 +118,6 @@ const Navbar = async () => {
           </Link>
         </div>
         <div className="w-full flex flex-col">
-          <Link
-            href="/config"
-            className="p-2 hover:bg-neutral-700 text-lg cursor-pointer flex items-center gap-x-2"
-          >
-            <Settings /> Config
-          </Link>
           {!session ? (
             <Link
               href="/login"
