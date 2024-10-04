@@ -12,15 +12,12 @@ const key = crypto
   .digest("hex")
   .substring(0, 32);
 
-const iv = crypto.randomBytes(16);
-
-export function encrypt(data: string) {
-  const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
-  let encrypted = cipher.update(data, "utf-8", "hex");
-  encrypted += cipher.final("hex");
-  // Package the IV and encrypted data together so it can be stored in a single
-  // column in the database.
-  return iv.toString("hex") + encrypted;
+export function encrypt(text: string) {
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(text);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return { iv: iv.toString("hex"), encryptedData: encrypted.toString("hex") };
 }
 
 export function decrypt(data: string) {

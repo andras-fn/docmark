@@ -1,4 +1,4 @@
-# Welcome to DocMarkAI!
+# Welcome to DocMark!
 
 DocMarkAI is a tool designed to test the results from Docman Workflow Assistant. Documents are uploaded which consist of the original letters text and the AI results as JSON. Marking Schemes consist of a bunch of Marking Criteria for each category (Summary, Key Diagnosis, Any New Medication, Urgency and Next Actions.
 

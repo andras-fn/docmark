@@ -23,12 +23,25 @@ import CompactPagination from "@/components/CompactPagination";
 import { useState } from "react";
 
 const BulkUploadDocumentsButtonModal = () => {
-  const [documents, setDocuments] = useState([]);
+  interface Document {
+    Key: string;
+    LastModified: string;
+    ETag: string;
+    Size: number;
+    StorageClass: string;
+  }
+
+  const [documents, setDocuments] = useState<Document[]>([]);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [name, setName] = useState("");
 
   const [accessKey, setAccessKey] = useState("");
   const [secretKey, setSecretKey] = useState("");
@@ -44,12 +57,22 @@ const BulkUploadDocumentsButtonModal = () => {
     try {
       setLoading(true); // Set loading state to true
 
+      console.log(
+        `/api/v1/documents/bulk-upload/check?accessKey=${accessKey}&secretKey=${secretKey}&region=${region}&bucketName=${bucketName}&folder=${folder}`
+      );
+
       const response = await fetch(
         `/api/v1/documents/bulk-upload/check?accessKey=${accessKey}&secretKey=${secretKey}&region=${region}&bucketName=${bucketName}&folder=${folder}`
       );
       const data = await response.json();
-      // console.log(data);
+
+      // check for errors
+      if (response.status !== 200) {
+        throw new Error(JSON.stringify(data.issues));
+      }
       setDocuments(data.data);
+      setError(false);
+      setErrorMessage("");
 
       const pageCheck = parseInt(data.pagination.totalResultCount) / 40;
       if (pageCheck % 1 !== 0) {
@@ -72,6 +95,46 @@ const BulkUploadDocumentsButtonModal = () => {
     // create queue message to start bulk upload
     // if successful, show success message
     // if failed, set error to true and set error message
+
+    try {
+      setSaveLoading(true); // Set loading state to true
+
+      const response = await fetch("/api/v1/documents/bulk-upload/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          accessKey,
+          secretKey,
+          region,
+          bucketName,
+          folder,
+          numberOfFiles: documents.length,
+        }),
+      });
+
+      const data = await response.json();
+
+      // check for errors
+      if (response.status !== 201) {
+        throw new Error(JSON.stringify(data.issues));
+      }
+
+      // show success message
+      console.log("Bulk upload started", data);
+      setSaveLoading(false); // Set loading state to false after data is fetched
+      setError(false);
+      setErrorMessage("");
+      setSuccess(true);
+      setSuccessMessage("Bulk upload created successfully");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setSaveLoading(false); // Set loading state to false in case of error
+      setError(true);
+      setErrorMessage((error as unknown as Error).message);
+    }
   };
 
   return (
@@ -83,6 +146,11 @@ const BulkUploadDocumentsButtonModal = () => {
         <DialogHeader>
           <DialogTitle>Bulk Upload Documents</DialogTitle>
         </DialogHeader>
+        {success && (
+          <div className="min-w-full w-fit bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded ">
+            {successMessage}
+          </div>
+        )}
         <div className="w-fit grid grid-cols-3 pt-4 gap-2">
           <div className="flex flex-col gap-y-2 col-span-3">
             <Label htmlFor="name" className="text-left">
@@ -90,9 +158,10 @@ const BulkUploadDocumentsButtonModal = () => {
             </Label>
             <Input
               id="name"
-              value=""
+              value={name}
               placeholder="Enter a Document Group Name for the uploaded Documents"
               className="max-w-96 w-96"
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-y-2">
@@ -101,9 +170,10 @@ const BulkUploadDocumentsButtonModal = () => {
             </Label>
             <Input
               id="access-key"
-              value=""
+              value={accessKey}
               placeholder="Add an S3 Access Key"
               className="max-w-96 w-96"
+              onChange={(e) => setAccessKey(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-y-2">
@@ -112,9 +182,10 @@ const BulkUploadDocumentsButtonModal = () => {
             </Label>
             <Input
               id="secret-key"
-              value=""
+              value={secretKey}
               placeholder="Add an S3 Secret Key"
               className="max-w-96 w-96"
+              onChange={(e) => setSecretKey(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-y-2">
@@ -123,9 +194,10 @@ const BulkUploadDocumentsButtonModal = () => {
             </Label>
             <Input
               id="region"
-              value=""
+              value={region}
               placeholder="Add the region of the S3 bucket"
               className="max-w-96 w-96"
+              onChange={(e) => setRegion(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-y-2">
@@ -134,9 +206,10 @@ const BulkUploadDocumentsButtonModal = () => {
             </Label>
             <Input
               id="bucket-name"
-              value=""
+              value={bucketName}
               placeholder="Add the name of the S3 bucket"
               className="max-w-96 w-96"
+              onChange={(e) => setBucketName(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-y-2">
@@ -148,9 +221,10 @@ const BulkUploadDocumentsButtonModal = () => {
             </Label>
             <Input
               id="folder"
-              value=""
+              value={folder}
               placeholder="Add the folder path in the S3 bucket"
               className="max-w-96 w-96"
+              onChange={(e) => setFolder(e.target.value)}
             />
           </div>
         </div>
@@ -179,14 +253,12 @@ const BulkUploadDocumentsButtonModal = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {documents.map((document) => (
-                <TableRow key={document.number}>
-                  <TableCell className="font-medium">
-                    {document.number}
-                  </TableCell>
-                  <TableCell>{document.key}</TableCell>
-                  <TableCell>{document.lastModified}</TableCell>
-                  <TableCell className="text-right">{document.size}</TableCell>
+              {documents.map((document, i) => (
+                <TableRow key={i}>
+                  <TableCell className="font-medium">{i + 1}</TableCell>
+                  <TableCell>{document.Key}</TableCell>
+                  <TableCell>{document.LastModified}</TableCell>
+                  <TableCell className="text-right">{document.Size}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -200,7 +272,9 @@ const BulkUploadDocumentsButtonModal = () => {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Start Bulk Upload</Button>
+          <Button type="submit" onClick={saveHandler}>
+            Start Bulk Upload
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

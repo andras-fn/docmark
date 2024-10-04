@@ -1,0 +1,2 @@
+ALTER TABLE "docmarkai_schema"."bulk_upload_data" ADD COLUMN "number_of_files" integer DEFAULT 0 NOT NULL;--> statement-breakpoint
+ALTER TABLE "docmarkai_schema"."bulk_upload_data" ADD COLUMN "status" "docmarkai_schema"."status" DEFAULT 'NOT_STARTED' NOT NULL;
