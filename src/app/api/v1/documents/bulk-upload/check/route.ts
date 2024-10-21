@@ -1,12 +1,5 @@
 // GET - get all document groups
 
-import { db } from "@/db/client";
-import { count, ilike } from "drizzle-orm";
-import { z } from "zod";
-import {
-  documentGroup,
-  insertDocumentGroupSchema,
-} from "@/db/schemas/documentGroup";
 import {
   S3Client,
   ListObjectsV2Command,
@@ -170,60 +163,6 @@ export async function GET(request: Request) {
     return Response.json(
       { status: 400, issues: (error as unknown as Error).message },
       { status: 500 }
-    );
-  }
-}
-
-// POST - create a document group
-export async function POST(request: Request) {
-  const { user } = await validateRequest();
-  if (!user) {
-    return Response.json(
-      { status: 401, issues: "Unauthorized" },
-      { status: 401 }
-    );
-  }
-  try {
-    const requestBody = await request.json();
-    //console.log("---", requestBody);
-
-    const parsedDocumentGroup = insertDocumentGroupSchema.parse(requestBody);
-
-    const [insertResult] = await db
-      .insert(documentGroup)
-      .values(parsedDocumentGroup)
-      .returning({ id: documentGroup.id });
-
-    return Response.json({ id: insertResult.id }, { status: 201 });
-  } catch (error: any) {
-    console.log(JSON.stringify({ error: error.toString() }, null, 2));
-    if (
-      error.toString().includes("SyntaxError: Unexpected end of JSON input")
-    ) {
-      return Response.json(
-        {
-          status: 400,
-          issues: [
-            {
-              code: "invalid_type",
-              expected: "json",
-              received: "none",
-              path: ["body"],
-              message: "Invalid JSON input. Please provide a valid JSON input.",
-            },
-          ],
-        },
-        { status: 400 }
-      );
-    }
-
-    if (error instanceof z.ZodError) {
-      return Response.json({ status: 400, issues: error }, { status: 400 });
-    }
-
-    return Response.json(
-      { status: 400, issues: [error.toString()] },
-      { status: 400 }
     );
   }
 }
